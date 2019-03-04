@@ -1,6 +1,9 @@
-#include <iostream>
+#include <SDL.h>
+#include <stdio.h>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    // TODO create renderer class and init from instance
+    // TODO extern game as global pointer/ref - init game from . . . ? main?
+    printf("Hello, World!");
     return 0;
 }
