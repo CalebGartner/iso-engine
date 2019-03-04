@@ -45,5 +45,3 @@ find_package(SDL2_gfx REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::GFX)
 
 # set(SDL2_TTF_PATH "/path/to/sdl2_ttf" CACHE BOOL "" FORCE)
-target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::GFX)
-
