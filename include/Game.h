@@ -19,13 +19,12 @@ private:
 
     Renderer                    renderer;
     bool                        running = false;
+    SDL_Event            e;
 
 };
 
 inline Renderer& Game::GetRenderer() {
     return renderer;
 }
-
-//extern Game game;
 
 #endif //ISO_ENGINE_GAME_H

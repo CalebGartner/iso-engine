@@ -1,8 +1,5 @@
 #include "Game.h"
 
-//Game game = Game();
-//Game* gameInstance = &game;
-
 Game::Game()  {
     // TODO init other engine components as they are created
     renderer = Renderer();
@@ -29,14 +26,21 @@ void Game::Shutdown() {
 }
 
 void Game::Run() {
-    running = true;
+    running = true;  // TODO make SDL_bool ?
     while (running) {
         Update();  // TODO
+//        renderer.Show();
     }
 }
 
 void Game::Update() {
-    // renderer.Show() ?
+    while(SDL_PollEvent( &e ) != 0) {
+        // User requests quit
+         if(e.type == SDL_QUIT) {
+             running = false;
+         }
+    }
+    renderer.Show();
 }
 
 Game::~Game() {

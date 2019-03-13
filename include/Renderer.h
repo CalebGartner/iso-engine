@@ -6,7 +6,11 @@
 class Renderer {
 public:
 
-    bool                        Init(const char* name = "Iso-Engine", int windowWidth = 1500, int windowHeight = 800);
+    // Screen dimension constants
+    static int screenWidth;
+    static int screenHeight;
+
+    bool                        Init(const char* name = "Iso-Engine", int windowWidth = screenWidth, int windowHeight = screenHeight);
     void                        Shutdown() const;
     void                        Show() const;
 
@@ -16,9 +20,10 @@ public:
 
 private:
 
-    SDL_Window*                 window;
-    SDL_Renderer*               internal_renderer;
-};
+    SDL_Window*                 window = nullptr;
+    SDL_Renderer*               internal_renderer = nullptr;
 
+    SDL_Surface* screenSurface = nullptr;  // temporary
+};
 
 #endif //ISO_ENGINE_RENDERER_H

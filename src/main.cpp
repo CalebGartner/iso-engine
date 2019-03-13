@@ -2,7 +2,6 @@
 #include "Game.h"
 
 int main() {
-    // TODO create renderer class and init from instance
     // TODO extern game as global pointer/ref - init game from . . . ? main?
     Game gameInstance;
     Game* game = &gameInstance;
@@ -11,6 +10,7 @@ int main() {
         return 1;
     }
 
-    game->Run();
+    game->Run(); // main loop entry
+
     return 0;
 }
