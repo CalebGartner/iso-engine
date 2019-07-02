@@ -3,28 +3,34 @@
 
 #include "Renderer.h"
 
+static Uint16 MS_PER_UPDATE = 16;  // TODO move to Display class
+
 class Game {
 public:
-    Game();
+    Game()
+    : renderer_(Renderer()), running_(false), event_(SDL_Event())
+    {}
+    // TODO init other engine components as they are created
 
-    bool                        Init();
-    void                        Run();
-    void                        Update();
-    void                        Shutdown();
-    Renderer&                   GetRenderer();
+    virtual ~Game() { shutdown(); };
 
-    ~Game();
+    bool init();
+    void run();
+    void update();
+    void shutdown();
+    Renderer &getRenderer();
+
 
 private:
 
-    Renderer                    renderer;
-    bool                        running = false;
-    SDL_Event            e;
+    Renderer renderer_;
+    bool running_;
+    SDL_Event event_;
 
 };
 
-inline Renderer& Game::GetRenderer() {
-    return renderer;
+inline Renderer &Game::getRenderer() {
+    return renderer_;
 }
 
 #endif //ISO_ENGINE_GAME_H

@@ -6,7 +6,7 @@
 class Renderer {
 public:
 
-    // Screen dimension constants
+    // Screen dimension constants - TODO make a separate 'Window' class?
     static int screenWidth;
     static int screenHeight;
 
