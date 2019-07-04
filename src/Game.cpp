@@ -2,61 +2,65 @@
 
 
 bool Game::init() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ERROR", SDL_GetError(), nullptr);
-        return false;
-    }
+    // Each game engine component will have an init() function since SDL must startup first
+    if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
 
-    if (!renderer_.Init()) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ERROR", SDL_GetError(), nullptr);
-        return false;
-    }
+    if (!Display::init()) return false;
+
+    if (!renderer_.init()) return false;  // Renderer uses Display, init() after
+    // TODO init other engine components as they are created
 
     return true;
 }
 
 void Game::run() {
     running_ = true;  // TODO make SDL_bool ?
-    SDL_DisplayMode ddm;
-    SDL_GetCurrentDisplayMode(0, &ddm);
-    Uint32 interval = 1000 / ddm.refresh_rate;  // TODO move calculation to external static function in 'Display.h'
-//    SDL_TimerID loopTimerID = SDL_AddTimer(interval, // TODO, nullptr); ?
+
+    // TODO put all the below into a struct? TickTimer? Timing?
     Uint32 previous = SDL_GetTicks();  // milliseconds since SDL initialization
+    Uint32 current = 0;
+    Uint32 elapsed = 0;
     Uint32 lag = 0;
+    Uint8 loops = 0;
+
+    // TODO add resource references @bottom/top
     while (running_) {
-        Uint32 current = SDL_GetTicks();
-        Uint32 elapsed = current - previous;
+        current = SDL_GetTicks();
+        elapsed = current - previous;
         previous = current;
         lag += elapsed;
 
-//        processInput();
+        processInput();
 
-        while (lag >= interval)  // MS_PER_UPDATE ?
-        {
-            update();
-            lag -= interval;
+        loops = 0;
+        while (lag >= Display::MS_PER_UPDATE && loops < MAX_FRAMESKIP) {
+            update();  // option - Only update once/<RR times a second, but render @ RR
+            lag -= Display::MS_PER_UPDATE;
+            loops++;
         }
 
-//        render();  // TODO pass lag to render . . .
+        renderer_.show();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
-//    while (running_) {
-//        update();  // TODO
-//        renderer_.Show();
-//    }
+
+    shutdown();
 }
 
 void Game::update() {
-    while(SDL_PollEvent( &event_ ) != 0) {
+    // TODO Deal w/event queue modified by proccessInput() and update/check buffers/spatial mapping(s)
+}
+
+void Game::processInput() {
+    // TODO Use event queue - SDL has one by default
+    while (SDL_PollEvent(&event_) != 0) {
         // User requests quit
-         if(event_.type == SDL_QUIT) {
-             running_ = false;
-         }
+        if (event_.type == SDL_QUIT) {
+            running_ = false;
+        }
     }
-    renderer_.Show();
 }
 
 void Game::shutdown() {
-    running_ = false;
-    renderer_.Shutdown();
+    running_ = false;  // This is blocking . . . call from another thread? Is it caught from user input instead?
+    renderer_.shutdown();
     SDL_Quit();
 }

@@ -1,70 +1,61 @@
-#include <SDL.h>
 #include "Renderer.h"
 #include "PathUtils.h"
 
-int Renderer::screenWidth = 1500;  // TODO get display settings
-int Renderer::screenHeight = 800;
 
-bool Renderer::Init(const char *name, int windowWidth, int windowHeight) {
-    window = SDL_CreateWindow(name,
-                              SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED,
-                              windowWidth,
-                              windowHeight,
-                              SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_BORDERLESS);
+bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
+    window_.reset(SDL_CreateWindow(name,
+                                   SDL_WINDOWPOS_CENTERED,
+                                   SDL_WINDOWPOS_CENTERED,
+                                   windowWidth,
+                                   windowHeight,
+                                   WINDOW_FLAGS), SDL_DestroyWindow);
 
-    if (!window)
+    if (!window_)
         return false;
 
     // DEBUG: SDL_RENDERER_TARGETTEXTURE allows rendering to SDL_Textures
-    internal_renderer = SDL_CreateRenderer(window,
-                                           -1,
-                                           SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
+    internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS), SDL_DestroyRenderer);
 
-    if (!internal_renderer)
+    if (!internalRenderer_)
         return false;
 
     SDL_Rect viewArea;
-    SDL_RenderGetViewport(internal_renderer, &viewArea);  // implement later . . .
+    SDL_RenderGetViewport(internalRenderer_.get(), &viewArea);  // implement later . . .
     // TODO create overlay vector of render images that remain static regardless of screen content - e.g., UI overlay
 
     // Get window surface - temporary
-    screenSurface = SDL_GetWindowSurface(window);
+    screenSurface_.reset(SDL_GetWindowSurface(window_.get()), SDL_FreeSurface);
 
     return true;
 }
 
-void Renderer::Shutdown() const {
-    SDL_FreeSurface(screenSurface);
-
-    if (internal_renderer)
-        SDL_DestroyRenderer(internal_renderer);
-
-    if (window)
-        SDL_DestroyWindow(window);
+void Renderer::shutdown() {
+    // TODO make sure they're all taken care of . . . change to unique_ptr?
+    if (screenSurface_.unique()) screenSurface_.reset();
+    if (internalRenderer_.unique()) internalRenderer_.reset();
+    if (window_.unique()) window_.reset();
 }
 
-void Renderer::Show() const {
-//    SDL_RenderPresent(internal_renderer);
+void Renderer::show() const {
+//    SDL_RenderPresent(internalRenderer_);
 
     // Fill the surface white
-    SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+    SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
+
     // update the surface
-    SDL_UpdateWindowSurface(window);
-    // Wait two seconds
-    SDL_Delay(500);
+    SDL_UpdateWindowSurface(window_.get());
 }
 
-SDL_Rect Renderer::ViewArea() const {
+SDL_Rect Renderer::viewArea() const {  // pass in Rect instead? Default arg?
     SDL_Rect viewArea;
-    SDL_RenderGetViewport(internal_renderer, &viewArea);  // init
+    SDL_RenderGetViewport(internalRenderer_.get(), &viewArea);  // init
     return viewArea;
 }
 
-SDL_Window *Renderer::GetWindow() const {
-    return window;
+std::shared_ptr<SDL_Window> Renderer::getWindow() const {
+    return window_;
 }
 
-SDL_Renderer *Renderer::GetRenderer() const {
-    return internal_renderer;
+std::shared_ptr<SDL_Renderer> Renderer::getRenderer() const {
+    return internalRenderer_;
 }

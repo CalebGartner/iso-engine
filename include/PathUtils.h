@@ -19,33 +19,37 @@
  *
  */
 
-std::string getResourcePath(const std::string &subDir = "") {
+namespace PathUtils {
+    std::string getResourcePath(const std::string &subDir = "") {
 
 #ifdef _WIN32
-    const char PATH_SEP = '\\';
+        const char PATH_SEP = '\\';
 #else
-    const char PATH_SEP = '/';
+        const char PATH_SEP = '/';
 #endif
 
-    static std::string resPath;  // static so we only need to find it once . . .
+        static std::string resPath;  // static so we only need to find it once . . .
 
-    if (resPath.empty()) {
-        char* basePath = SDL_GetBasePath();
-        if (basePath) {
-            resPath = basePath;
-            SDL_free(basePath);
-        } else {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
-                                     "ERROR RETRIEVING RESOURCE PATH",
-                                     SDL_GetError(),
-                                     nullptr);
-            return "";  // use 'nullptr' instead?
+        if (resPath.empty()) {
+            char *basePath = SDL_GetBasePath();
+            if (basePath) {
+                resPath = basePath;
+                SDL_free(basePath);
+            } else {
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+                                         "ERROR RETRIEVING RESOURCE PATH",
+                                         SDL_GetError(),
+                                         nullptr);
+                return "";  // use 'nullptr' instead?
+            }
+            // We replace the last bin/ with res/ to get the the resource path
+            size_t pos = resPath.rfind("bin");
+            resPath = resPath.substr(0, pos) + "res" + PATH_SEP;
         }
-        // We replace the last bin/ with res/ to get the the resource path
-        size_t pos = resPath.rfind("bin");
-        resPath = resPath.substr(0, pos) + "res" + PATH_SEP;
+        // If we want a specific subdirectory path in the resource directory
+        return subDir.empty() ? resPath : resPath + subDir + PATH_SEP;
     }
-    // If we want a specific subdirectory path in the resource directory
-    return subDir.empty() ? resPath : resPath + subDir + PATH_SEP;
 }
+
+
 #endif //ISO_ENGINE_PATHUTILS_H

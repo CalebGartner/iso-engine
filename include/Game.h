@@ -1,15 +1,14 @@
 #ifndef ISO_ENGINE_GAME_H
 #define ISO_ENGINE_GAME_H
 
+#include "SDL_events.h"
 #include "Renderer.h"
+// TODO logging (via SDL_Log?) and debug preprocessing/asserts
 
-static Uint16 MS_PER_UPDATE = 16;  // TODO move to Display class
+static Uint8 MAX_FRAMESKIP = 5;
 
 class Game {
 public:
-    Game()
-    : renderer_(Renderer()), running_(false), event_(SDL_Event())
-    {}
     // TODO init other engine components as they are created
 
     virtual ~Game() { shutdown(); };
@@ -18,19 +17,16 @@ public:
     void run();
     void update();
     void shutdown();
-    Renderer &getRenderer();
-
+    const Renderer &getRenderer();
 
 private:
+    Renderer renderer_;  // TODO make this a shared_ptr/ref to stack variable so everything is deleted properly?
+    bool running_ = false;
+    SDL_Event event_;  // replace when coding input handling . . .
 
-    Renderer renderer_;
-    bool running_;
-    SDL_Event event_;
-
+    void processInput();
 };
 
-inline Renderer &Game::getRenderer() {
-    return renderer_;
-}
+inline const Renderer &Game::getRenderer() { return renderer_; }
 
 #endif //ISO_ENGINE_GAME_H
