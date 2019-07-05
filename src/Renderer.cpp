@@ -19,9 +19,9 @@ bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
     if (!internalRenderer_)
         return false;
 
-    SDL_Rect viewArea;
-    SDL_RenderGetViewport(internalRenderer_.get(), &viewArea);  // implement later . . .
-    // TODO create overlay vector of render images that remain static regardless of screen content - e.g., UI overlay
+    SDL_Rect camera;  // Make into private variable? create separate class?
+    SDL_RenderGetViewport(internalRenderer_.get(), &camera);  // implement later . . .
+    // TODO create overlay viewports that remain static regardless of screen content - e.g., UI overlay
 
     // Get window surface - temporary
     screenSurface_.reset(SDL_GetWindowSurface(window_.get()), SDL_FreeSurface);
@@ -37,9 +37,13 @@ void Renderer::shutdown() {
 }
 
 void Renderer::show() const {
+//    SDL_SetRenderDrawColor(internalRenderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+//    SDL_RenderClear(internalRenderer_);
+//    // TODO
 //    SDL_RenderPresent(internalRenderer_);
 
     // Fill the surface white
+    // TODO replace w/background blit image
     SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
 
     // update the surface

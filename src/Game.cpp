@@ -1,3 +1,11 @@
+/*
+ * Game Loop articles/resources/patterns/explanations/etc.
+ * https://web.archive.org/web/20190506122532/http://gafferongames.com/post/fix_your_timestep/
+ * https://dewitters.com/dewitters-gameloop/
+ * https://web.archive.org/web/20141116170950/http://www.richardfine.co.uk/2012/10/unity3d-monobehaviour-lifecycle/
+ *
+ */
+
 #include "Game.h"
 
 
@@ -16,14 +24,13 @@ bool Game::init() {
 void Game::run() {
     running_ = true;  // TODO make SDL_bool ?
 
-    // TODO put all the below into a struct? TickTimer? Timing?
+    // TODO put all the below into a struct? TickTimer? LoopTiming?
     Uint32 previous = SDL_GetTicks();  // milliseconds since SDL initialization
     Uint32 current = 0;
     Uint32 elapsed = 0;
     Uint32 lag = 0;
     Uint8 loops = 0;
 
-    // TODO add resource references @bottom/top
     while (running_) {
         current = SDL_GetTicks();
         elapsed = current - previous;
@@ -33,7 +40,7 @@ void Game::run() {
         processInput();
 
         loops = 0;
-        while (lag >= Display::MS_PER_UPDATE && loops < MAX_FRAMESKIP) {
+        while (lag >= Display::MS_PER_UPDATE && loops < MAX_FRAMESKIP) {  // fixed time-step
             update();  // option - Only update once/<RR times a second, but render @ RR
             lag -= Display::MS_PER_UPDATE;
             loops++;
