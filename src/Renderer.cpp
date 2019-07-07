@@ -1,6 +1,10 @@
 #include "Renderer.h"
 #include "PathUtils.h"
 
+#define WINDOW_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP)
+
+#define RENDERER_FLAGS (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC)
+
 
 bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
     window_.reset(SDL_CreateWindow(name,
