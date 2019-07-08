@@ -12,13 +12,15 @@ bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
                                    SDL_WINDOWPOS_CENTERED,
                                    windowWidth,
                                    windowHeight,
-                                   WINDOW_FLAGS), SDL_DestroyWindow);
+                                   WINDOW_FLAGS),
+                  SDL_DestroyWindow);
 
     if (!window_)
         return false;
 
     // DEBUG: SDL_RENDERER_TARGETTEXTURE allows rendering to SDL_Textures
-    internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS), SDL_DestroyRenderer);
+    internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS),
+                            SDL_DestroyRenderer);
 
     if (!internalRenderer_)
         return false;

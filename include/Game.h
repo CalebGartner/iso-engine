@@ -22,7 +22,7 @@ public:
 private:
     Renderer renderer_;  // TODO make this a shared_ptr/ref to stack variable so everything is deleted properly?
     bool running_ = false;
-    SDL_Event event_;  // replace when coding input handling . . .
+    SDL_Event event_ = SDL_Event();  // replace when coding input handling . . .
 
     void processInput();
 };

@@ -3,7 +3,6 @@
  * https://web.archive.org/web/20190506122532/http://gafferongames.com/post/fix_your_timestep/
  * https://dewitters.com/dewitters-gameloop/
  * https://web.archive.org/web/20141116170950/http://www.richardfine.co.uk/2012/10/unity3d-monobehaviour-lifecycle/
- *
  */
 
 #include "Game.h"
