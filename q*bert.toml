@@ -12,12 +12,24 @@
     viewportposition=[ 0, 0 ]  # Also define camera/viewport start-position for level via upper left coordinates?
 
     [[layers.tiles]]  # rename to map/tilemap?
-        # dimensions="wxh" ?
-        pyramid=false  # TODO
-        layer=[  # rename to map/layout?  # perhaps don't do this? use relative coordinates/padding instead? e.g., padding=2\nscore="upper left" ?
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+        # TODO map layers by aspect ratio? viewport/window is always 16 units wide by 12/10/9 units tall . . .
+        # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
+        [[layers.tiles.map]]
+            aspectratio='4:3'  # irrelevant? map to viewportposition at [ 12, 9 ] ?
+            layer=[  # rename to map/layout?  # perhaps don't do this? use relative coordinates/padding instead? e.g., padding=2\nscore="upper left" ?
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
 
     [[layers.characters]]  # player, balls, snake, discs, etc.
@@ -25,11 +37,11 @@
     [[layers.ui]]
 
 
-# TODO is this necessary . . . ?
+# TODO is this necessary . . . ? - not really
 [[display]]
 
     [[display.aspectratio]]
-        "4:3"=[ [ 640, 480 ],
+        '4:3'=[ [ 640, 480 ],
                 [ 800, 600 ],
                 [ 960, 720 ],
                 [ 1024, 768 ],
@@ -43,7 +55,7 @@
           ]
 
     [[display.aspectratio]]
-        "16:10"=[ [ 1280, 800 ],
+        '16:10'=[ [ 1280, 800 ],
                   [ 1440, 900 ],
                   [ 1680, 1050 ],
                   [ 1920, 1200 ],
@@ -51,7 +63,7 @@
         ]
 
     [[display.aspectratio]]
-        "16:9"=[ [ 1024, 576 ],
+        '16:9'=[ [ 1024, 576 ],
                  [ 1152, 648 ],
                  [ 1280, 720 ],
                  [ 1366, 768 ],
