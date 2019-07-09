@@ -1,0 +1,31 @@
+# Configuration file for a Q*BERT clone - https://strategywiki.org/wiki/Q*bert
+
+[[tile]]
+    width=32  # automatically set via given/chosen resolution?
+    height=32
+    touched="path/to/res"
+    untouched="path/to/res"
+    # add subtables for specific types of tiles . . .
+
+resolutions=[  # TODO map to aspect ratios?
+    [ 1920, 1080 ],
+    [ 1440, 900 ],
+    [ 1280, 720 ],
+
+]
+
+[[map]]  # layers ? divide by level?
+    level=1  # TODO?
+    viewportposition=[ 0, 0 ]  # Also define camera/viewport start-position for level via upper left coordinates?
+
+    [[layers.tiles]]  # rename to map/tilemap?
+        pyramid=false  # TODO
+        layer=[  # rename to map/layout?  # perhaps don't do this? use relative coordinates/padding instead? e.g., padding=2\nscore="upper left" ?
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        ]
+
+    [[layers.characters]]  # player, balls, snake, discs, etc.
+
+    [[layers.ui]]
