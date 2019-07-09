@@ -7,18 +7,12 @@
     untouched="path/to/res"
     # add subtables for specific types of tiles . . .
 
-resolutions=[  # TODO map to aspect ratios?
-    [ 1920, 1080 ],
-    [ 1440, 900 ],
-    [ 1280, 720 ],
-
-]
-
 [[map]]  # layers ? divide by level?
     level=1  # TODO?
     viewportposition=[ 0, 0 ]  # Also define camera/viewport start-position for level via upper left coordinates?
 
     [[layers.tiles]]  # rename to map/tilemap?
+        # dimensions="wxh" ?
         pyramid=false  # TODO
         layer=[  # rename to map/layout?  # perhaps don't do this? use relative coordinates/padding instead? e.g., padding=2\nscore="upper left" ?
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -29,3 +23,41 @@ resolutions=[  # TODO map to aspect ratios?
     [[layers.characters]]  # player, balls, snake, discs, etc.
 
     [[layers.ui]]
+
+
+# TODO is this necessary . . . ?
+[[display]]
+
+    [[display.aspectratio]]
+        "4:3"=[ [ 640, 480 ],
+                [ 800, 600 ],
+                [ 960, 720 ],
+                [ 1024, 768 ],
+                [ 1280, 960 ],
+                [ 1400, 1050 ],
+                [ 1440, 1080 ],
+                [ 1600, 1200 ],
+                [ 1856, 1392 ],
+                [ 1920, 1440 ],
+                [ 2048, 1536 ]
+          ]
+
+    [[display.aspectratio]]
+        "16:10"=[ [ 1280, 800 ],
+                  [ 1440, 900 ],
+                  [ 1680, 1050 ],
+                  [ 1920, 1200 ],
+                  [ 2560, 1600 ]
+        ]
+
+    [[display.aspectratio]]
+        "16:9"=[ [ 1024, 576 ],
+                 [ 1152, 648 ],
+                 [ 1280, 720 ],
+                 [ 1366, 768 ],
+                 [ 1600, 900 ],
+                 [ 1920, 1080 ],  # FHD
+                 [ 2560, 1440 ],  # QHD
+                 [ 3840, 2160 ],  # 4K
+                 [ 7680, 4320 ]   # 8K
+        ]
