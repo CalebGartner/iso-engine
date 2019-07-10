@@ -7,11 +7,19 @@
 // Eventually load level from config file
 // Should it also control the viewport? camera class?
 
-// This will come to depend on the screen size . . .
-static const int WINDOW_TILE_NUM = 15;  // the number of tiles along the window's width will be calculated
-
 class Map {
 public:
+    Map(std::string game = "q*bert.toml")
+    : gameFile_(game)
+    {}
+
+    virtual ~Map() { shutdown(); };
+
+    bool init();
+    void shutdown();
+
+private:
+    std::string gameFile_;
 
 };
 

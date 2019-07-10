@@ -1,3 +1,6 @@
 [submodule "cmake/sdl2"]
 	path = cmake/sdl2
 	url = https://gitlab.com/aminosbh/sdl2-cmake-modules.git
+[submodule "cpptoml"]
+	path = cpptoml
+	url = https://github.com/skystrife/cpptoml
