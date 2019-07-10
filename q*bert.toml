@@ -1,77 +1,40 @@
 # Configuration file for a Q*BERT clone - https://strategywiki.org/wiki/Q*bert
 # TODO add TMX support? - http://doc.mapeditor.org/en/stable/reference/support-for-tmx-maps/#id1
 
-[[levels]]
-    # The variables below are overridden by a level if they are specified in that level
-    # This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
-    topcenter=[ 0, 0 ]
-    lives=4
-    scorepertile=30
+# The variables below are overridden by a level if they are specified in that level
+# This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
+topcenter=[ 0, 0 ]
+lives=4
+scorepertile=30
 
-    [levels.1]  # TODO add rounds?
-        # viewport/window is always 16 units wide by 12/10/9 units tall . . .
-        [levels.1.tiles]
-            untouched='res/blocks/PNG/abstract-tiles/abstractTile_12.png'
-            touched='res/blocks/PNG/abstract-tiles/abstractTile_32.png'
+[levels.1]  # TODO add rounds?
+    # viewport/window is always 16 units wide by 12/10/9 units tall . . .
+    [levels.1.tiles]
+        untouched='res/blocks/PNG/abstract-tiles/abstractTile_12.png'
+        touched='res/blocks/PNG/abstract-tiles/abstractTile_32.png'
 
-        # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
-        # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide so that the pyramid is completely shown
-        minscreentilewidth=9  # makes aspecct ratio irrelevant?
-        bonus=1000  # bonus points for completing this level
-        # Mapping reference - http://clintbellanger.net/articles/isometric_math/
-        # 0 = no tile
-        # 1 = platform tile
-        # 2 = disc
-        map=[    # 9x9 grid/2
+    # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
+    # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide/heigh
+    # so that the pyramid is completely shown
+    minscreentilewidth=9
+    minscreentileheight=9
+    bonus=1000  # bonus points for completing this level
+    # Mapping reference - http://clintbellanger.net/articles/isometric_math/
+    # 0 = no tile
+    # 1 = platform tile
+    # 2 = disc
+    map=[    # 9x9 grid/2
 # top center of screen
-            [0,0,0,0,0,0,2,0,0], # rightmost on screen
-            [0,1,1,1,1,1,1,1,0],
-            [0,1,1,1,1,1,1,0],
-            [0,1,1,1,1,1,0],
-            [0,1,1,1,1,0],  # bottom of screen
-            [0,1,1,1,0],
-            [2,1,1,0],
-            [0,1,0],
-            [0,0]
+        [0,0,0,0,0,0,2,0,0], # rightmost on screen
+        [0,1,1,1,1,1,1,1,0],
+        [0,1,1,1,1,1,1,0],
+        [0,1,1,1,1,1,0],
+        [0,1,1,1,1,0],  # bottom of screen
+        [0,1,1,1,0],
+        [2,1,1,0],
+        [0,1,0],
+        [0,0]
 # leftmost on screen
-        ]
-    [levels.2]
-        # etc . . .
-
-
-# TODO is this necessary . . . ? - for menu resize options
-[[display]]
-
-    [[display.aspectratio]]
-        '4:3'=[ [ 640, 480 ],
-                [ 800, 600 ],
-                [ 960, 720 ],
-                [ 1024, 768 ],
-                [ 1280, 960 ],
-                [ 1400, 1050 ],
-                [ 1440, 1080 ],
-                [ 1600, 1200 ],
-                [ 1856, 1392 ],
-                [ 1920, 1440 ],
-                [ 2048, 1536 ]
-          ]
-
-    [[display.aspectratio]]
-        '16:10'=[ [ 1280, 800 ],
-                  [ 1440, 900 ],
-                  [ 1680, 1050 ],
-                  [ 1920, 1200 ],
-                  [ 2560, 1600 ]
-        ]
-
-    [[display.aspectratio]]
-        '16:9'=[ [ 1024, 576 ],
-                 [ 1152, 648 ],
-                 [ 1280, 720 ],
-                 [ 1366, 768 ],
-                 [ 1600, 900 ],
-                 [ 1920, 1080 ],  # FHD
-                 [ 2560, 1440 ],  # QHD
-                 [ 3840, 2160 ],  # 4K
-                 [ 7680, 4320 ]   # 8K
-        ]
+    ]
+[levels.2]
+    # etc . . .

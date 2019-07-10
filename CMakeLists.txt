@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 #install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 # Add all headers files under the include directory
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(${PROJECT_NAME} PRIVATE include cpptoml/include)
 
 # Add compiler errors/warnings flags
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<C_COMPILER_ID:MSVC>:/W4 /WX>)
