@@ -1,43 +1,45 @@
 # Configuration file for a Q*BERT clone - https://strategywiki.org/wiki/Q*bert
+# TODO add TMX support? - http://doc.mapeditor.org/en/stable/reference/support-for-tmx-maps/#id1
 
-[[tile]]
-    width=32  # automatically set via given/chosen resolution?
-    height=32
-    touched="path/to/res"
-    untouched="path/to/res"
-    # add subtables for specific types of tiles . . .
+[[levels]]
+    # The variables below are overridden by a level if they are specified in that level
+    # This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
+    topcenter=[ 0, 0 ]
+    lives=4
+    scorepertile=30
 
-[[map]]  # layers ? divide by level?
-    level=1  # TODO?
-    viewportposition=[ 0, 0 ]  # Also define camera/viewport start-position for level via upper left coordinates?
+    [levels.1]  # TODO add rounds?
+        # viewport/window is always 16 units wide by 12/10/9 units tall . . .
+        [levels.1.tiles]
+            untouched='res/blocks/PNG/abstract-tiles/abstractTile_12.png'
+            touched='res/blocks/PNG/abstract-tiles/abstractTile_32.png'
 
-    [[layers.tiles]]  # rename to map/tilemap?
-
-        # TODO map layers by aspect ratio? viewport/window is always 16 units wide by 12/10/9 units tall . . .
         # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
-        [[layers.tiles.map]]
-            aspectratio='4:3'  # irrelevant? map to viewportposition at [ 12, 9 ] ?
-            layer=[  # rename to map/layout?  # perhaps don't do this? use relative coordinates/padding instead? e.g., padding=2\nscore="upper left" ?
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide so that the pyramid is completely shown
+        minscreentilewidth=9  # makes aspecct ratio irrelevant?
+        bonus=1000  # bonus points for completing this level
+        # Mapping reference - http://clintbellanger.net/articles/isometric_math/
+        # 0 = no tile
+        # 1 = platform tile
+        # 2 = disc
+        map=[    # 9x9 grid/2
+# top center of screen
+            [0,0,0,0,0,0,2,0,0], # rightmost on screen
+            [0,1,1,1,1,1,1,1,0],
+            [0,1,1,1,1,1,1,0],
+            [0,1,1,1,1,1,0],
+            [0,1,1,1,1,0],  # bottom of screen
+            [0,1,1,1,0],
+            [2,1,1,0],
+            [0,1,0],
+            [0,0]
+# leftmost on screen
         ]
-
-    [[layers.characters]]  # player, balls, snake, discs, etc.
-
-    [[layers.ui]]
+    [levels.2]
+        # etc . . .
 
 
-# TODO is this necessary . . . ? - not really
+# TODO is this necessary . . . ? - for menu resize options
 [[display]]
 
     [[display.aspectratio]]
