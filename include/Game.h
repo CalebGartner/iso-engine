@@ -1,8 +1,10 @@
 #ifndef ISO_ENGINE_GAME_H
 #define ISO_ENGINE_GAME_H
 
-#include "SDL_events.h"
+
+#include "SDL.h"
 #include "Renderer.h"
+#include "Level.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts
 

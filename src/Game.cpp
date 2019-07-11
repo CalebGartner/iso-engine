@@ -12,8 +12,8 @@ Game::Game(){
 //    renderer_ = Renderer();
     running_ = false;
 //    event_ = SDL_Event();
-    Level::gameConfig_ = PathUtils::getResourcePath() + "q*bert.toml";  // make q*bert.toml a var somewhere
-    level_ = std::make_unique<Level>(0);
+//    Level::gameConfig_ = PathUtils::getResourcePath() + "q*bert.toml";  // make q*bert.toml a var somewhere
+    level_ = std::make_unique<Level>(1);
 }
 
 bool Game::init() {

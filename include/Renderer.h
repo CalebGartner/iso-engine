@@ -2,9 +2,8 @@
 #define ISO_ENGINE_RENDERER_H
 
 #include <memory>
-#include "SDL_render.h"
-#include "Display.h"  // brings in SDL.h/SDL_video.h
-#include "Level.h"  // brings in Map.h
+#include <SDL_render.h>
+#include "Display.h"
 
 class Renderer {
 public:

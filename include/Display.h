@@ -1,8 +1,7 @@
 #ifndef ISO_ENGINE_DISPLAY_H
 #define ISO_ENGINE_DISPLAY_H
 
-#include "SDL.h"
-#include "SDL_video.h"
+#include <SDL_video.h>
 
 namespace Display {
     static SDL_DisplayMode current;

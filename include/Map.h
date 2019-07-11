@@ -1,7 +1,6 @@
 #ifndef ISO_ENGINE_MAP_H
 #define ISO_ENGINE_MAP_H
 
-#include "PathUtils.h"
 
 // The 'Map' should load images to tiles and set the tile's position.
 // Eventually load level from config file
