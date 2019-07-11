@@ -8,6 +8,14 @@
 #include "Game.h"
 
 
+Game::Game(){
+//    renderer_ = Renderer();
+    running_ = false;
+//    event_ = SDL_Event();
+    Level::gameConfig_ = PathUtils::getResourcePath() + "q*bert.toml";  // make q*bert.toml a var somewhere
+    level_ = std::make_unique<Level>(0);
+}
+
 bool Game::init() {
     // Each game engine component will have an init() function since SDL must startup first
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
@@ -16,6 +24,8 @@ bool Game::init() {
 
     if (!renderer_.init()) return false;  // Renderer uses Display, init() after
     // TODO init other engine components as they are created
+
+
 
     return true;
 }

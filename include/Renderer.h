@@ -3,11 +3,12 @@
 
 #include <memory>
 #include "SDL_render.h"
-#include "Display.h"
+#include "Display.h"  // brings in SDL.h/SDL_video.h
+#include "Level.h"  // brings in Map.h
 
 class Renderer {
 public:
-    bool init(const char *name = "ISO-Engine",
+    bool init(std::string name = "ISO-Engine",
               Uint32 windowWidth = Display::WIDTH,
               Uint32 windowHeight = Display::HEIGHT);
     void shutdown();

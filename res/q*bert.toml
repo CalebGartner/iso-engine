@@ -4,21 +4,21 @@
 # The variables below are overridden by a level if they are specified in that level
 # This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
 topcenter=[ 0, 0 ]
-lives=4
 scorepertile=30
+bonus=1000  # bonus points for completing this level
 
-[levels.1]  # TODO add rounds?
-    # viewport/window is always 16 units wide by 12/10/9 units tall . . .
-    [levels.1.tiles]
+[[level]]  # TODO add rounds?
+    id=1
+
+    [[level.tiles]]
         untouched='res/blocks/PNG/abstract-tiles/abstractTile_12.png'
         touched='res/blocks/PNG/abstract-tiles/abstractTile_32.png'
 
     # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
-    # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide/heigh
+    # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide/high
     # so that the pyramid is completely shown
     minscreentilewidth=9
     minscreentileheight=9
-    bonus=1000  # bonus points for completing this level
     # Mapping reference - http://clintbellanger.net/articles/isometric_math/
     # 0 = no tile
     # 1 = platform tile
@@ -36,5 +36,6 @@ scorepertile=30
         [0,0]
 # leftmost on screen
     ]
-[levels.2]
+[[level]]
+    id=2
     # etc . . .

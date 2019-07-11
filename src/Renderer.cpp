@@ -1,13 +1,12 @@
 #include "Renderer.h"
-#include "PathUtils.h"
 
 #define WINDOW_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP)
 
 #define RENDERER_FLAGS (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC)
 
 
-bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
-    window_.reset(SDL_CreateWindow(name,
+bool Renderer::init(const std::string name, Uint32 windowWidth, Uint32 windowHeight) {
+    window_.reset(SDL_CreateWindow(name.c_str(),
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
                                    windowWidth,
@@ -27,6 +26,7 @@ bool Renderer::init(const char *name, Uint32 windowWidth, Uint32 windowHeight) {
 
     SDL_Rect camera;  // Make into private variable? create separate class?
     SDL_RenderGetViewport(internalRenderer_.get(), &camera);  // implement later . . .
+    SDL_free(&camera);
     // TODO create overlay viewports that remain static regardless of screen content - e.g., UI overlay
 
     // Get window surface - temporary
