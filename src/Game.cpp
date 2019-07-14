@@ -12,7 +12,6 @@ Game::Game(){
 //    renderer_ = Renderer();
     running_ = false;
 //    event_ = SDL_Event();
-//    Level::gameConfig_ = PathUtils::getResourcePath() + "q*bert.toml";  // make q*bert.toml a var somewhere
     level_ = std::make_unique<Level>(1);
 }
 
@@ -25,7 +24,7 @@ bool Game::init() {
     if (!renderer_.init()) return false;  // Renderer uses Display, init() after
     // TODO init other engine components as they are created
 
-
+    if (!level_->init(renderer_)) return false;
 
     return true;
 }
@@ -55,6 +54,7 @@ void Game::run() {
             loops++;
         }
 
+        // TODO make Game::render() function to access renderer_/level_/everything else
         renderer_.show();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
 
@@ -79,4 +79,14 @@ void Game::shutdown() {
     running_ = false;  // This is blocking . . . call from another thread? Is it caught from user input instead?
     renderer_.shutdown();
     SDL_Quit();
+}
+
+void Game::render() const {
+    SDL_SetRenderDrawColor(&renderer_.getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(&renderer_.getRenderer());
+
+    // TODO render level tiles/player/other stuff
+    renderer_.show();  // remove?
+
+    SDL_RenderPresent(&renderer_.getRenderer());
 }

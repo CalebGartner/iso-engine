@@ -1,17 +1,20 @@
+#include <Renderer.h>
+#include <SDL_image.h>
 #include "PathUtils.h"
 #include "Level.h"
 
-Level::Level(Uint32 levelID) {
-    levelID_ = levelID;
-    // Can't touch SDL here since it's initialized in Game::init()
+bool Level::init(const Renderer &renderer) {
     std::shared_ptr<cpptoml::table> config;
     try {
-        config = cpptoml::parse_file(PathUtils::getResourcePath() + "q*bert.toml");  // make q*bert.toml a var somewhere);
+        // TODO make q*bert.toml a var somewhere
+        config = cpptoml::parse_file(PathUtils::getResourcePath() + "q*bert.toml");
     } catch (const cpptoml::parse_exception &e) {
         SDL_Log("PARSE ERROR: %s", e.what());
-        return;
+        return false;
     }
 
+    auto anchor = *(config->get_array_of<int64_t >("topcenteranchor"));
+    std::copy(anchor.begin(), anchor.end(), topCenterAnchor_);
     scorePerTile_ = *(config->get_as<Uint32>("scorepertile"));
     bonus_ = *(config->get_as<Uint32>("bonus"));
 
@@ -27,16 +30,44 @@ Level::Level(Uint32 levelID) {
     }
 
     auto inner = level->get_table("tiles");
-    tileTouched_ = *(inner->get_as<std::string>("touched"));
-    tileUntouched_ = *(inner->get_as<std::string>("untouched"));
+
+    // TODO make below into a function - separate init() into other functions - check for null/error when loading/creating texture/img
+    std::string touched = *(inner->get_as<std::string>("touched"));
+    auto touchedSurface = IMG_Load(touched.c_str());
+    tileTouched_.reset(SDL_CreateTextureFromSurface(&renderer.getRenderer(),
+                                                    touchedSurface));
+    SDL_FreeSurface(touchedSurface);
+
+    std::string untouched = *(inner->get_as<std::string>("untouched"));
+    auto untouchedSurface = IMG_Load(untouched.c_str());
+    tileUntouched_.reset(SDL_CreateTextureFromSurface(&renderer.getRenderer(),
+                                                      untouchedSurface));
+    SDL_FreeSurface(untouchedSurface);
+
+//    if( loadedSurface == NULL )
+//    {
+//        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+//    }
 
     minScreenTileWidth_ = *(level->get_as<Uint32>("minscreentilewidth"));
     minScreenTileHeight_ = *(level->get_as<Uint32>("minscreentileheight"));
 
-    auto map = level->get_array_of<cpptoml::array>("map");  // TODO make member variable?
-//    auto arr = (*map)[0]->get_array_of<uint32_t>();
-    for (const auto &line: *map) {
-        auto hmm = line->as_array();
+    auto levelMap = level->get_array_of<cpptoml::array>("map");
+    map_ = std::vector<std::vector<SDL_Texture*>>(levelMap->size());
+    int i = 0;
+
+    for (const auto &arr: *levelMap) {
+        const auto line = arr->get_array_of<int64_t>();
+        map_[i] = std::vector<SDL_Texture*>(line->size());
+        for (const auto &tileType: *line) {
+            auto it = map_[i].begin();
+            if (tileType == 0) map_[i].insert(it, nullptr);
+            if (tileType == 1) map_[i].insert(it, tileUntouched_.get());
+            if (tileType == 2) map_[i].insert(it, nullptr);  // TODO add disc sprite
+            if (tileType == 3) map_[i].insert(it, tileTouched_.get());
+        }
+        ++i;
     }
 
+    return true;
 }

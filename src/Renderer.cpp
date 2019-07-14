@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
-#define WINDOW_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP)
+#define WINDOW_FLAGS (SDL_WINDOW_SHOWN)
+// | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP)
 
 #define RENDERER_FLAGS (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC)
 
@@ -11,35 +12,32 @@ bool Renderer::init(const std::string name, Uint32 windowWidth, Uint32 windowHei
                                    SDL_WINDOWPOS_CENTERED,
                                    windowWidth,
                                    windowHeight,
-                                   WINDOW_FLAGS),
-                  SDL_DestroyWindow);
+                                   WINDOW_FLAGS));
 
     if (!window_)
         return false;
 
     // DEBUG: SDL_RENDERER_TARGETTEXTURE allows rendering to SDL_Textures
-    internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS),
-                            SDL_DestroyRenderer);
+    internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS));
 
     if (!internalRenderer_)
         return false;
 
     SDL_Rect camera;  // Make into private variable? create separate class?
     SDL_RenderGetViewport(internalRenderer_.get(), &camera);  // implement later . . .
-    SDL_free(&camera);
     // TODO create overlay viewports that remain static regardless of screen content - e.g., UI overlay
 
     // Get window surface - temporary
-    screenSurface_.reset(SDL_GetWindowSurface(window_.get()), SDL_FreeSurface);
+    screenSurface_.reset(SDL_GetWindowSurface(window_.get()));
 
     return true;
 }
 
 void Renderer::shutdown() {
-    // TODO make sure they're all taken care of . . . change to unique_ptr?
-    if (screenSurface_.unique()) screenSurface_.reset();
-    if (internalRenderer_.unique()) internalRenderer_.reset();
-    if (window_.unique()) window_.reset();
+    // TODO this shouldn't be necessary since they'll automatically delete when the Renderer loses scope
+    screenSurface_.reset();
+    internalRenderer_.reset();
+    window_.reset();
 }
 
 void Renderer::show() const {
@@ -62,10 +60,10 @@ SDL_Rect Renderer::viewArea() const {  // pass in Rect instead? Default arg?
     return viewArea;
 }
 
-std::shared_ptr<SDL_Window> Renderer::getWindow() const {
-    return window_;
+SDL_Window &Renderer::getWindow() const {
+    return *window_;
 }
 
-std::shared_ptr<SDL_Renderer> Renderer::getRenderer() const {
-    return internalRenderer_;
+SDL_Renderer &Renderer::getRenderer() const {
+    return *internalRenderer_;
 }

@@ -8,20 +8,20 @@
 class Renderer {
 public:
     bool init(std::string name = "ISO-Engine",
-              Uint32 windowWidth = Display::WIDTH,
-              Uint32 windowHeight = Display::HEIGHT);
+              Uint32 windowWidth = Display::WIDTH/2,
+              Uint32 windowHeight = Display::HEIGHT/2);
     void shutdown();
-    void show() const;
+    void show() const;  // TODO remove?
 
     SDL_Rect viewArea() const;
-    std::shared_ptr<SDL_Window> getWindow() const;
-    std::shared_ptr<SDL_Renderer> getRenderer() const;
+    SDL_Window &getWindow() const;
+    SDL_Renderer &getRenderer() const;
 
 private:
     // Default initialize w/nullptr since SDL needs to initialize first
-    std::shared_ptr<SDL_Window> window_{nullptr, SDL_DestroyWindow};
-    std::shared_ptr<SDL_Renderer> internalRenderer_{nullptr, SDL_DestroyRenderer};
-    std::shared_ptr<SDL_Surface> screenSurface_{nullptr, SDL_FreeSurface};  // temporary
+    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window_{nullptr, SDL_DestroyWindow};
+    std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> internalRenderer_{nullptr, SDL_DestroyRenderer};
+    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> screenSurface_{nullptr, SDL_FreeSurface};  // temporary
 
 };
 

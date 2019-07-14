@@ -3,7 +3,7 @@
 
 # The variables below are overridden by a level if they are specified in that level
 # This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
-topcenter=[ 0, 0 ]
+topcenteranchor=[ 0, 0 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
 
@@ -15,6 +15,7 @@ bonus=1000  # bonus points for completing this level
     # so that the pyramid is completely shown
     minscreentilewidth=9
     minscreentileheight=9
+    # TODO do I need to define tile dimensions or can I get that after loading?
     # Mapping reference - http://clintbellanger.net/articles/isometric_math/
     # 0 = no tile
     # 1 = platform tile
