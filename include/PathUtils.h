@@ -3,7 +3,8 @@
 
 #include <string>
 #include <iostream>
-#include <SDL.h>
+#include <algorithm>
+#include "SDL.h"
 
 /*
  * A decent chunk of the following code comes from this tutorial:
@@ -20,7 +21,7 @@
  */
 
 namespace PathUtils {
-    std::string getResourcePath(const std::string &subDir = "") {
+    std::string getResourcePath(std::string subPath = "") {  // TODO additional subdir args
 
 #ifdef _WIN32
         const char PATH_SEP = '\\';
@@ -46,8 +47,9 @@ namespace PathUtils {
             size_t pos = resPath.rfind("bin");
             resPath = resPath.substr(0, pos) + "res" + PATH_SEP;
         }
+        std::replace(subPath.begin(), subPath.end(), '|', PATH_SEP);
         // If we want a specific subdirectory path in the resource directory
-        return subDir.empty() ? resPath : resPath + subDir + PATH_SEP;
+        return subPath.empty() ? resPath : resPath + subPath;
     }
 }
 

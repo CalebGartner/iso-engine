@@ -6,7 +6,7 @@
 #define RENDERER_FLAGS (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC)
 
 
-bool Renderer::init(const std::string name, Uint32 windowWidth, Uint32 windowHeight) {
+bool Renderer::init(const std::string &name, Uint32 windowWidth, Uint32 windowHeight) {
     window_.reset(SDL_CreateWindow(name.c_str(),
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
@@ -16,6 +16,9 @@ bool Renderer::init(const std::string name, Uint32 windowWidth, Uint32 windowHei
 
     if (!window_)
         return false;
+
+    windowHeight_ = windowHeight;
+    windowWidth_ = windowWidth;
 
     // DEBUG: SDL_RENDERER_TARGETTEXTURE allows rendering to SDL_Textures
     internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS));
@@ -34,7 +37,6 @@ bool Renderer::init(const std::string name, Uint32 windowWidth, Uint32 windowHei
 }
 
 void Renderer::shutdown() {
-    // TODO this shouldn't be necessary since they'll automatically delete when the Renderer loses scope
     screenSurface_.reset();
     internalRenderer_.reset();
     window_.reset();
@@ -48,10 +50,10 @@ void Renderer::show() const {
 
     // Fill the surface white
     // TODO replace w/background blit image
-    SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
+//    SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
 
     // update the surface
-    SDL_UpdateWindowSurface(window_.get());
+//    SDL_UpdateWindowSurface(window_.get());
 }
 
 SDL_Rect Renderer::viewArea() const {  // pass in Rect instead? Default arg?

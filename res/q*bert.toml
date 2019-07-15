@@ -2,21 +2,20 @@
 # TODO add TMX support? - http://doc.mapeditor.org/en/stable/reference/support-for-tmx-maps/#id1
 
 # The variables below are overridden by a level if they are specified in that level
-# This defines the layer/map array coordinate to place at the top center position of the screen after loading the layer/map
-topcenteranchor=[ 0, 0 ]
+# The origin defines the map array coordinate to place at the top center position of the screen after loading the map
+origin=[ 0, 0 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
 
+[tiles]
+    # Using pipe character '|' as platform agnostic path separator - this assumes the tiles are under res/
+    untouched='blocks|PNG|abstract-tiles|abstractTile_12.png'
+    touched='blocks|PNG|abstract-tiles|abstractTile_32.png'
+
 [[level]]  # TODO add rounds?
     id=1
-
-    # TODO remember to center the projected map (below) via the camera offset - e.g. screen.x += SCREEN_WIDTH_HALF
-    # For this level, regardless of aspect ratio, the screen should fit at least 9 tiles wide/high
-    # so that the pyramid is completely shown
-    minscreentilewidth=9
-    minscreentileheight=9
-    # TODO do I need to define tile dimensions or can I get that after loading?
-    # Mapping reference - http://clintbellanger.net/articles/isometric_math/
+    # For this level, regardless of aspect ratio, the screen should fit at least 6 tiles high so that the pyramid is completely shown
+    minscreentileheight=6  # diagonal/vertical height of pyramid map in tiles
     # 0 = no tile
     # 1 = platform tile
     # 2 = disc
