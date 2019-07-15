@@ -22,6 +22,9 @@ public:
     void render(const Renderer &renderer) const;
     void renderTile(SDL_Texture *texture, int x, int y, SDL_Rect *clip = nullptr, double angle = 0.0, SDL_Point *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
+    // These offsets essentially become the new tile grid origin - defaults to [0,0]
+    int xOffset_ = 0, yOffset_ = 0;
+
 private:
     Uint32 levelID_;
     Uint32 scorePerTile_ = 30;
@@ -34,8 +37,6 @@ private:
 
     // TODO make each node a linked-list of Tiles instead . . .
     std::vector<std::vector<SDL_Texture*>> map_;  // TODO make public?
-    // These offsets essentially become the new tile grid origin - defaults to [0,0]
-    int xOffset_ = 0, yOffset_ = 0;
 
     SDL_Texture *loadTexture(const Renderer &renderer, const std::string &resource);
 };

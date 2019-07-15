@@ -31,7 +31,7 @@ bool Game::init() {
 }
 
 void Game::run() {
-    running_ = true;  // TODO make SDL_bool ?
+    running_ = true;
 
     // TODO put all the below into a struct? TickTimer? LoopTiming?
     Uint32 previous = SDL_GetTicks();  // milliseconds since SDL initialization
@@ -84,8 +84,8 @@ void Game::render() const {
     SDL_SetRenderDrawColor(&renderer_.getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(&renderer_.getRenderer());
 
-    // TODO render level tiles/player/other stuff
-//    renderer_.show();  // remove?
+    // TODO render level background/player/other stuff
+    renderer_.show();  // remove?
     level_->render(renderer_);
 
     SDL_RenderPresent(&renderer_.getRenderer());

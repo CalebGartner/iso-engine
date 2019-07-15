@@ -41,9 +41,10 @@ void Renderer::shutdown() {
 
 void Renderer::show() const {
     // TODO replace w/background blit image
-//    SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
-    // update the surface
-//    SDL_UpdateWindowSurface(window_.get());
+    SDL_SetRenderDrawColor(internalRenderer_.get(), 0x00, 0x00, 0x00, 0x00);
+    auto v = viewArea();
+    SDL_RenderFillRect(internalRenderer_.get(), &v);
+    SDL_SetRenderDrawColor(internalRenderer_.get(), 0xFF, 0xFF, 0xFF, 0xFF);
 }
 
 SDL_Rect Renderer::viewArea() const {  // pass in Rect instead? Default arg?

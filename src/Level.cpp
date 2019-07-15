@@ -61,12 +61,21 @@ bool Level::init(const Renderer &renderer) {
         const auto line = arr->get_array_of<int64_t>();
         map_[i] = std::vector<SDL_Texture*>(line->size());
         for (const auto &tileType: *line) {
-            // TODO change to switch cases
             auto it = map_[i].begin();
-            if (tileType == 0) map_[i].insert(it, nullptr);
-            if (tileType == 1) map_[i].insert(it, tileUntouched_.get());
-            if (tileType == 2) map_[i].insert(it, nullptr);  // TODO add disc sprite
-            if (tileType == 3) map_[i].insert(it, tileTouched_.get());
+            switch (tileType) {  // TODO change to hash map/pairs or something else
+                case 1:
+                    map_[i].insert(it, tileUntouched_.get());
+                    break;
+                case 2:
+                    map_[i].insert(it, nullptr);
+                    break;
+                case 3:
+                    map_[i].insert(it, tileTouched_.get());
+                    break;
+                default:
+                    map_[i].insert(it, nullptr);
+                    break;
+            }
         }
         map_[i].shrink_to_fit();  // Currently the map doesn't change size during runtime . . .
         ++i;
