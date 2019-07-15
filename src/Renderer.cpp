@@ -17,9 +17,6 @@ bool Renderer::init(const std::string &name, Uint32 windowWidth, Uint32 windowHe
     if (!window_)
         return false;
 
-    windowHeight_ = windowHeight;
-    windowWidth_ = windowWidth;
-
     // DEBUG: SDL_RENDERER_TARGETTEXTURE allows rendering to SDL_Textures
     internalRenderer_.reset(SDL_CreateRenderer(window_.get(), -1, RENDERER_FLAGS));
 
@@ -43,15 +40,8 @@ void Renderer::shutdown() {
 }
 
 void Renderer::show() const {
-//    SDL_SetRenderDrawColor(internalRenderer_, 0xFF, 0xFF, 0xFF, 0xFF);
-//    SDL_RenderClear(internalRenderer_);
-//    // TODO
-//    SDL_RenderPresent(internalRenderer_);
-
-    // Fill the surface white
     // TODO replace w/background blit image
 //    SDL_FillRect(screenSurface_.get(), nullptr, SDL_MapRGB(screenSurface_->format, 0xFF, 0xFF, 0xFF));
-
     // update the surface
 //    SDL_UpdateWindowSurface(window_.get());
 }

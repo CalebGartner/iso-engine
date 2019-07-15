@@ -4,16 +4,18 @@
 #include "Level.h"
 
 bool Level::init(const Renderer &renderer) {
+    // Open TOML file for parsing
     std::shared_ptr<cpptoml::table> config;
     try {
-        config = cpptoml::parse_file(PathUtils::getResourcePath(Level::gameConfig_));
+        config = cpptoml::parse_file(PathUtils::getResourcePath(Level::GameConfig));
     } catch (const cpptoml::parse_exception &e) {
         SDL_Log("PARSE ERROR: %s", e.what());
         return false;
     }
 
     auto anchor = *(config->get_array_of<int64_t >("origin"));
-    std::copy(anchor.begin(), anchor.end(), topCenterAnchor_);
+    xOffset_ = anchor[0];
+    yOffset_ = anchor[1];
     scorePerTile_ = *(config->get_as<Uint32>("scorepertile"));
     bonus_ = *(config->get_as<Uint32>("bonus"));
 
@@ -37,9 +39,9 @@ bool Level::init(const Renderer &renderer) {
     tileUntouched_.reset(loadTexture(renderer, untouched));
     if (!tileUntouched_) return false;
 
+    // Calculate tile dimensions
     minScreenTileHeight_ = *(level->get_as<Uint32>("minscreentileheight"));
-
-    int windowTileHeight = renderer.windowHeight_ / minScreenTileHeight_;
+    int windowTileHeight = Renderer::WindowHeight / minScreenTileHeight_;
 
     int w, h;
     SDL_QueryTexture(tileUntouched_.get(), nullptr, nullptr, &w, &h);
@@ -109,14 +111,14 @@ void Level::render(const Renderer &renderer) const {
     for(std::vector<std::vector<SDL_Texture*>>::size_type i = 0; i != map_.size(); i++) {
         for(std::vector<SDL_Texture*>::size_type k = 0; k != map_[i].size(); k++) {
             if (map_[i][k] == nullptr) continue;
-            // TODO rename to member vars xOffset_, yOffset_ - change these when the player moves to keep the 'camera' centered on the PC
+            // TODO xOffset_, yOffset_ - change these when the player moves to keep the 'camera' centered on the PC
             // TODO create functions for mapToScreen and screenToMap
-            int screenX = ((i - topCenterAnchor_[0]) - (k - topCenterAnchor_[1])) * (TILE_WIDTH_HALF);
+            int screenX = ((i - xOffset_) - (k - yOffset_)) * (TILE_WIDTH_HALF);
             // *1.5 is necessary since each tile extends "downwards" - i.e., each one is a hexagonal tile, not a simple diamond
-            int screenY = ((i - topCenterAnchor_[0]) + (k - topCenterAnchor_[1])) * (TILE_HEIGHT_HALF*1.5);
-            screenX += (renderer.windowWidth_ / 2) - TILE_WIDTH_HALF;  // TODO use viewArea/camera/viewport instead? make static . . .
+            int screenY = ((i - xOffset_) + (k - yOffset_)) * static_cast<int>(TILE_HEIGHT_HALF*1.5);
+            screenX += (Renderer::WindowWidth / 2) - TILE_WIDTH_HALF;  // TODO make static . . .
             // Offsetting the y values by this amount helps correct the map when the tile height and width differ
-            screenY -= TILE_HEIGHT_HALF * (2 + TILE_HEIGHT_WIDTH_RATIO);  // TODO simplify/combine equation w/above? make static . . .
+            screenY -= static_cast<int>(TILE_HEIGHT_HALF * (2 + TILE_HEIGHT_WIDTH_RATIO));  // TODO simplify/combine equation w/above? make static . . .
 //            screenY += ((i+k) * (TILE_HEIGHT_HALF/2));  // This would work if the array were staggered
             SDL_Rect rect = {screenX, screenY, TILE_WIDTH_HALF*2, TILE_HEIGHT_HALF*2};
             SDL_RenderCopy(&renderer.getRenderer(), map_[i][k], nullptr, &rect);

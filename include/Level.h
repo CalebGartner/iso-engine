@@ -12,7 +12,7 @@ static double TILE_HEIGHT_WIDTH_RATIO;
 
 class Level {
 public:
-    inline static std::string gameConfig_ = "q*bert.toml";  // TODO make Game class variable?
+    inline static std::string GameConfig = "q*bert.toml";  // TODO make Game class variable?
 
     explicit Level(Uint32 levelID)
     : levelID_(levelID)
@@ -34,7 +34,8 @@ private:
 
     // TODO make each node a linked-list of Tiles instead . . .
     std::vector<std::vector<SDL_Texture*>> map_;  // TODO make public?
-    int topCenterAnchor_[2] = {0,0};  // This essentially becomes the new tile grid origin - defaults to [0,0]
+    // These offsets essentially become the new tile grid origin - defaults to [0,0]
+    int xOffset_ = 0, yOffset_ = 0;
 
     SDL_Texture *loadTexture(const Renderer &renderer, const std::string &resource);
 };

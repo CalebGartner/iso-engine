@@ -6,6 +6,7 @@
  */
 
 #include "Game.h"
+#include "Display.h"
 
 
 Game::Game(){
@@ -53,8 +54,6 @@ void Game::run() {
             lag -= Display::MS_PER_UPDATE;
             loops++;
         }
-
-        // TODO make Game::render() function to access renderer_/level_/everything else
         render();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
 
@@ -87,10 +86,7 @@ void Game::render() const {
 
     // TODO render level tiles/player/other stuff
 //    renderer_.show();  // remove?
-
     level_->render(renderer_);
-//    SDL_Rect rect = {300, 0, 56, 64};
-//    SDL_RenderCopy(&renderer_.getRenderer(), level_->tileUntouched_.get(), nullptr, &rect);
 
     SDL_RenderPresent(&renderer_.getRenderer());
 }
