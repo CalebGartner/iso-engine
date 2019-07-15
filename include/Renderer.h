@@ -28,8 +28,6 @@ private:
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window_{nullptr, SDL_DestroyWindow};
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> internalRenderer_{nullptr, SDL_DestroyRenderer};
     std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> screenSurface_{nullptr, SDL_FreeSurface};  // temporary
-
-
 };
 
 #endif //ISO_ENGINE_RENDERER_H

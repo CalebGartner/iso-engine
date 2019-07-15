@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "Renderer.h"
 #include "Level.h"
+#include "Player.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts
 
@@ -30,6 +31,7 @@ private:
     // Will be automatically deleted when switching levels via reset()
     // TODO Load level by menu selection after that's implemented
     std::unique_ptr<Level> level_;
+    std::unique_ptr<Player> player_;
 
     void processInput();
 };
