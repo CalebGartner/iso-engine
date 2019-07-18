@@ -3,8 +3,8 @@
 
 
 #include "SDL.h"
-#include "Renderer.h"
-#include "Level.h"
+//#include "Renderer.h"
+//#include "Level.h"
 #include "Player.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts
@@ -13,7 +13,8 @@ static Uint8 MAX_FRAMESKIP = 5;
 
 class Game {
 public:
-    // TODO init other engine components as they are created
+    inline static std::string GameConfig = "q*bert.toml";
+
     Game();
     virtual ~Game() { shutdown(); };
 

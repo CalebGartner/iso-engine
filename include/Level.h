@@ -3,22 +3,23 @@
 
 #include <string>
 #include "SDL.h"
+#include "SDL_image.h"
 #include "cpptoml.h"
+#include "Renderer.h"
+#include "EngineUtils.h"
 
 // TODO double buffer the map?
-static int TILE_WIDTH_HALF;
-static int TILE_HEIGHT_HALF;
-static double TILE_HEIGHT_WIDTH_RATIO;
+extern int TILE_WIDTH_HALF;
+extern int TILE_HEIGHT_HALF;
+extern double TILE_HEIGHT_WIDTH_RATIO;
 
 class Level {
 public:
-    inline static std::string GameConfig = "q*bert.toml";  // TODO make Game class variable?
-
     explicit Level(Uint32 levelID)
     : levelID_(levelID)
     {};
 
-    bool init(const Renderer &renderer);
+    bool init(const Renderer &renderer, const cpptoml::table &config);
     void render(const Renderer &renderer) const;
     void renderTile(SDL_Texture *texture, int x, int y, SDL_Rect *clip = nullptr, double angle = 0.0, SDL_Point *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 

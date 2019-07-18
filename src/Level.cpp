@@ -1,26 +1,18 @@
-#include <Renderer.h>
-#include <SDL_image.h>
-#include "PathUtils.h"
 #include "Level.h"
 
-bool Level::init(const Renderer &renderer) {
-    // Open TOML file for parsing
-    std::shared_ptr<cpptoml::table> config;
-    try {
-        config = cpptoml::parse_file(PathUtils::getResourcePath(Level::GameConfig));
-    } catch (const cpptoml::parse_exception &e) {
-        SDL_Log("PARSE ERROR: %s", e.what());
-        return false;
-    }
+int TILE_WIDTH_HALF = 0;
+int TILE_HEIGHT_HALF = 0;
+double TILE_HEIGHT_WIDTH_RATIO = 0;
 
-    auto anchor = *(config->get_array_of<int64_t >("origin"));
+bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
+    auto anchor = *(config.get_array_of<int64_t >("origin"));
     xOffset_ = anchor[0];
     yOffset_ = anchor[1];
-    scorePerTile_ = *(config->get_as<Uint32>("scorepertile"));
-    bonus_ = *(config->get_as<Uint32>("bonus"));
+    scorePerTile_ = *(config.get_as<Uint32>("scorepertile"));
+    bonus_ = *(config.get_as<Uint32>("bonus"));
 
     // Get the corresponding level table from the TOML file
-    auto tarr = config->get_table_array("level");
+    auto tarr = config.get_table_array("level");
     std::shared_ptr<cpptoml::table> level;
     for (const auto &table : *tarr) {
         auto id = table->get_as<Uint32>("id");
@@ -31,13 +23,19 @@ bool Level::init(const Renderer &renderer) {
     }
 
     // Load the specified tile textures
-    std::string touched = *(config->get_qualified_as<std::string>("tiles.touched"));
+    std::string touched = *(config.get_qualified_as<std::string>("tiles.touched"));
     tileTouched_.reset(loadTexture(renderer, touched));
     if (!tileTouched_) return false;
 
-    std::string untouched = *(config->get_qualified_as<std::string>("tiles.untouched"));
+    std::string untouched = *(config.get_qualified_as<std::string>("tiles.untouched"));
     tileUntouched_.reset(loadTexture(renderer, untouched));
     if (!tileUntouched_) return false;
+
+    // Set window icon
+    std::string iconPath = *(config.get_as<std::string>("windowicon"));
+    SDL_Surface *icon = IMG_Load(EngineUtils::getResourcePath(iconPath).c_str());
+    SDL_SetWindowIcon(&renderer.getWindow(), icon);
+    SDL_FreeSurface(icon);
 
     // Calculate tile dimensions
     minScreenTileHeight_ = *(level->get_as<Uint32>("minscreentileheight"));
@@ -83,9 +81,10 @@ bool Level::init(const Renderer &renderer) {
     return true;
 }
 
+// TODO add to ISOUtils namespace?
 SDL_Texture *Level::loadTexture(const Renderer &renderer, const std::string &resource) {
     // TODO load from vector .svg sprite sheet instead and optimize the texture/image via SDL_Optimize~~~?
-    auto surface = IMG_Load(PathUtils::getResourcePath(resource).c_str());
+    auto surface = IMG_Load(EngineUtils::getResourcePath(resource).c_str());
     if (surface == nullptr) {
         printf("Unable to load image %s! SDL_image Error: %s\n", resource.c_str(), IMG_GetError());
         return nullptr;

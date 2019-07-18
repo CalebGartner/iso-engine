@@ -3,6 +3,7 @@
 
 #include <SDL_video.h>
 
+// TODO make 'extern'
 namespace Display {
     static SDL_DisplayMode current;
     static Uint32 MS_PER_UPDATE = 0;  // i.e., SKIP_TICK/INTERVAL - filled by init()

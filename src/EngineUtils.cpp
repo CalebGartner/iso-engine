@@ -1,11 +1,4 @@
-#ifndef ISO_ENGINE_PATHUTILS_H
-#define ISO_ENGINE_PATHUTILS_H
-
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include "SDL.h"
-
+#include "EngineUtils.h"
 /*
  * A decent chunk of the following code comes from this tutorial:
  *      https://www.willusher.io/sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths
@@ -20,8 +13,8 @@
  *
  */
 
-namespace PathUtils {
-    std::string getResourcePath(std::string subPath = "") {  // TODO additional subdir args
+namespace EngineUtils {
+    std::string getResourcePath(std::string subPath) {
 
 #ifdef _WIN32
         const char PATH_SEP = '\\';
@@ -52,6 +45,3 @@ namespace PathUtils {
         return subPath.empty() ? resPath : resPath + subPath;
     }
 }
-
-
-#endif //ISO_ENGINE_PATHUTILS_H

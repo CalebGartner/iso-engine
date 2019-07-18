@@ -6,7 +6,6 @@
  */
 
 #include "Game.h"
-#include "Display.h"
 
 
 Game::Game(){
@@ -14,6 +13,7 @@ Game::Game(){
     running_ = false;
 //    event_ = SDL_Event();
     level_ = std::make_unique<Level>(1);
+    player_ = std::make_unique<Player>();
 }
 
 bool Game::init() {
@@ -23,9 +23,19 @@ bool Game::init() {
     if (!Display::init()) return false;
 
     if (!renderer_.init()) return false;  // Renderer uses Display, init() after
-    // TODO init other engine components as they are created
 
-    if (!level_->init(renderer_)) return false;
+    // Open TOML file for parsing
+    std::shared_ptr<cpptoml::table> config;
+    try {
+        config = cpptoml::parse_file(EngineUtils::getResourcePath(GameConfig));
+    } catch (const cpptoml::parse_exception &e) {
+        SDL_Log("PARSE ERROR: %s", e.what());
+        return false;
+    }
+
+    if (!level_->init(renderer_, *config)) return false;
+
+    if (!player_->init(renderer_, *config)) return false;
 
     return true;
 }
@@ -62,10 +72,12 @@ void Game::run() {
 
 void Game::update() {
     // TODO Deal w/event queue modified by proccessInput() and update/check buffers/spatial mapping(s)
+    // level_->update();
+    // TODO update viewArea/camera after player updates by checking x,y values before/after?
+    player_->processInput();
 }
 
 void Game::processInput() {
-    // TODO Use event queue - SDL has one by default
     while (SDL_PollEvent(&event_) != 0) {
         // User requests quit
         if (event_.type == SDL_QUIT) {
@@ -87,6 +99,7 @@ void Game::render() const {
     // TODO render level background/player/other stuff
     renderer_.show();  // remove?
     level_->render(renderer_);
+    player_->render(renderer_);
 
     SDL_RenderPresent(&renderer_.getRenderer());
 }
