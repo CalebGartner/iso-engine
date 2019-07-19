@@ -17,7 +17,7 @@ public:
               Uint32 windowWidth = WindowWidth,
               Uint32 windowHeight = WindowHeight);
     void shutdown();
-    void show() const;  // TODO remove?
+    void show() const;
 
     SDL_Rect viewArea() const;
     SDL_Window &getWindow() const;

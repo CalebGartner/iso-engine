@@ -3,7 +3,7 @@
 int TILE_WIDTH_HALF = 0;
 int TILE_HEIGHT_HALF = 0;
 double TILE_HEIGHT_WIDTH_RATIO = 0;
-Uint32 ISO_TILE_TOUCHED = SDL_RegisterEvents(1);
+Uint32 ISO_TILE_TOUCHED = 0;
 
 bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     auto anchor = *(config.get_array_of<int64_t >("origin"));
@@ -32,6 +32,7 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     tileUntouched_.reset(loadTexture(renderer, untouched));
     if (!tileUntouched_) return false;
 
+    ISO_TILE_TOUCHED = SDL_RegisterEvents(1);
     if (ISO_TILE_TOUCHED == ((Uint32) - 1)) return false;
 
     // Set window icon

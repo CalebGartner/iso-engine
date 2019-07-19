@@ -39,7 +39,7 @@ void MovingState::update(Player &player) {
         player.dX_ = 0;
         player.dY_ = 0;
         Player::state_ = &PlayerState::Still;
-        // Throw onto queue
+        // Push onto queue
         SDL_zero(tileEvent_);
         tileEvent_.type = ISO_TILE_TOUCHED;
         tileEvent_.user.data1 = &player.x_;

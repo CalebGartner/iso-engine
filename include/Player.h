@@ -28,7 +28,7 @@ public:
     double x_, y_;  // grid position
     int dX_, dY_;
 private:
-    // TODO make shared_pointer, reset() on update() calls
+    // TODO add continuous player animation
     std::vector<std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> playerTextures_;
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> playerTexture_{nullptr, SDL_DestroyTexture};
 };

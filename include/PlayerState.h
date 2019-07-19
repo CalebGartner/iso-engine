@@ -5,7 +5,6 @@ class Player;
 class MovingState;
 class StillState;
 
-#include "SDL_timer.h"
 #include "Display.h"
 
 
@@ -26,12 +25,14 @@ public:
 
 class MovingState: public PlayerState {
 public:
-    inline static SDL_Event tileEvent_ = SDL_Event();
     void update(Player &player) override;
 private:
-    inline static int MS_TO_MOVE = 400;  // how long the player's movement from tile to tile takes
+    // how long the player's movement from tile to tile takes
+    inline static int MS_TO_MOVE = 400;
     inline static int timesMoved_ = 0;
-    int numFrames_;  // number of frames it takes to complete the movement based on the display refresh rate and MS_TO_MOVE
+    // number of frames it takes to complete the movement based on the display refresh rate and MS_TO_MOVE
+    inline static int numFrames_ = 0;
+    inline static SDL_Event tileEvent_ = SDL_Event();
 };
 
 #endif //ISO_ENGINE_PLAYERSTATE_H

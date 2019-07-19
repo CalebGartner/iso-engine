@@ -9,7 +9,6 @@
 #include "EngineUtils.h"
 #include "Player.h"
 
-// TODO double buffer the map?
 extern int TILE_WIDTH_HALF;
 extern int TILE_HEIGHT_HALF;
 extern double TILE_HEIGHT_WIDTH_RATIO;

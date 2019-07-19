@@ -26,9 +26,9 @@ public:
     const Renderer &getRenderer();
 
 private:
-    Renderer renderer_{};  // TODO make this a shared_ptr/unique_ptr?
+    Renderer renderer_{};
     bool running_;
-    SDL_Event event_{};  // replace when coding input handling . . .
+    SDL_Event event_{};
     // Will be automatically deleted when switching levels via reset()
     // TODO Load level by menu selection after that's implemented
     std::unique_ptr<Level> level_;
