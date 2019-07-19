@@ -2,9 +2,9 @@
 #define ISO_ENGINE_PLAYER_H
 
 #include <memory>
-#include <SDL_render.h>
-#include <SDL_image.h>
-#include <SDL_log.h>
+#include "SDL_render.h"
+#include "SDL_image.h"
+#include "SDL_log.h"
 #include "cpptoml.h"
 #include "Renderer.h"
 #include "Level.h"

@@ -1,7 +1,7 @@
 #ifndef ISO_ENGINE_DISPLAY_H
 #define ISO_ENGINE_DISPLAY_H
 
-#include <SDL_video.h>
+#include "SDL_video.h"
 
 namespace Display {
     extern SDL_DisplayMode current;

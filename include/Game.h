@@ -3,8 +3,6 @@
 
 
 #include "SDL.h"
-//#include "Renderer.h"
-//#include "Level.h"
 #include "Player.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts
