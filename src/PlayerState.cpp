@@ -14,15 +14,21 @@ void MovingState::update(Player &player) {
     }
 
     double lag_factor = 0.5;
+    int dX = (player.dX_ != 0) ? player.dX_ : (1 * player.dY_);
+    int dY = (player.dY_ != 0) ? player.dY_ : (1 * player.dX_);
+    if (player.dX_ == -1 || player.dY_ == -1) {
+        dY *= -1;
+        dX *= -1;
+        lag_factor *= -1;
+    }
     double t = 1.0 / numFrames_;
     if (timesMoved_ < (numFrames_ / 2)) {
-        player.x_ += (t * player.dX_) * (1.0 + lag_factor);
-        player.y_ += (t * player.dY_) * (1.0 + lag_factor);
+        player.x_ += (t * (player.dX_ * (1.0 + lag_factor))) - (dX * t);
+        player.y_ += (t * (player.dY_ * (1.0 + lag_factor))) - (dY * t);
     } else {
-        player.x_ += (t * player.dX_) * (1.0 - lag_factor);
-        player.y_ += (t * player.dY_) * (1.0 - lag_factor);
+        player.x_ += (t * (player.dX_ * (1.0 - lag_factor))) + (dX * t);
+        player.y_ += (t * (player.dY_ * (1.0 - lag_factor))) + (dY * t);
     }
-
 
     if (timesMoved_ <= numFrames_) {
         ++timesMoved_;
