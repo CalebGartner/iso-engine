@@ -16,25 +16,21 @@ static double PLAYER_TILE_RATIO = 0.75;
 class Player {
 public:
     bool init(const Renderer &renderer, const cpptoml::table &config);
-    void processInput();
+    void processInput(const SDL_Event &event);
     void render(const Renderer &renderer) const;
+    void update();
 
     inline double getScreenX() const;
     inline double getScreenY() const;
 
-    double x_, y_;
-    int width_, height_;
+    static SDL_Rect rect_;  // screen position
+    static PlayerState *state_;  // TODO state push-down automata
+    double x_, y_;  // grid position
+    int dX_, dY_;
 private:
-    int dX, dY;
     // TODO make shared_pointer, reset() on update() calls
-    PlayerState &state_ = PlayerState::Still;
     std::vector<std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> playerTextures_;
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> playerTexture_{nullptr, SDL_DestroyTexture};
 };
-
-
-// PlayerState: MovingState: StillState: - make static
-// TODO give each state update() methods and transfer x_, y_ (dX/dY as well? or just use x_ += ... calculations) over
-
 
 #endif //ISO_ENGINE_PLAYER_H

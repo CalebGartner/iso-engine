@@ -3,6 +3,7 @@
 int TILE_WIDTH_HALF = 0;
 int TILE_HEIGHT_HALF = 0;
 double TILE_HEIGHT_WIDTH_RATIO = 0;
+Uint32 ISO_TILE_TOUCHED = SDL_RegisterEvents(1);
 
 bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     auto anchor = *(config.get_array_of<int64_t >("origin"));
@@ -30,6 +31,8 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     std::string untouched = *(config.get_qualified_as<std::string>("tiles.untouched"));
     tileUntouched_.reset(loadTexture(renderer, untouched));
     if (!tileUntouched_) return false;
+
+    if (ISO_TILE_TOUCHED == ((Uint32) - 1)) return false;
 
     // Set window icon
     std::string iconPath = *(config.get_as<std::string>("windowicon"));
@@ -132,4 +135,21 @@ void Level::render(const Renderer &renderer) const {
             SDL_RenderCopy(&renderer.getRenderer(), map_[i][k], nullptr, &rect);
         }
     }
+}
+
+void Level::update() {
+    if (event_.code == 1) {
+        double x = *(double*)(event_.data1);
+        double y = *(double*)(event_.data2);
+        map_[static_cast<int>(x)][static_cast<int>(y)] = tileTouched_.get();
+    }
+    SDL_zero(event_);  // reset
+    event_.code = 0;
+}
+
+void Level::processInput(const SDL_Event &event) {
+    event_.type = event.user.type;
+    event_.data1 = event.user.data1;
+    event_.data2 = event.user.data2;
+    event_.code = 1;
 }

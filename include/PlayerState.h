@@ -1,11 +1,12 @@
 #ifndef ISO_ENGINE_PLAYERSTATE_H
 #define ISO_ENGINE_PLAYERSTATE_H
 
-#include "SDL_timer.h"
-
 class Player;
 class MovingState;
 class StillState;
+
+#include "SDL_timer.h"
+#include "Display.h"
 
 
 class PlayerState {
@@ -15,21 +16,22 @@ public:
     static StillState Still;
 
     virtual ~PlayerState() = default;
-    virtual void update(const Player &player) = 0;
+    virtual void update(Player &player) = 0;
 };
 
 class StillState: public PlayerState {
 public:
-    void update(const Player &player) override;
+    void update(Player &player) override;
 };
 
 class MovingState: public PlayerState {
 public:
-    void update(const Player &player) override;
+    inline static SDL_Event tileEvent_ = SDL_Event();
+    void update(Player &player) override;
 private:
-    inline static int MS_TO_MOVE = 1000;  // how long the player's movement from tile to tile takes
+    inline static int MS_TO_MOVE = 400;  // how long the player's movement from tile to tile takes
     inline static int timesMoved_ = 0;
-    inline static int start_ = 0;
+    int numFrames_;  // number of frames it takes to complete the movement based on the display refresh rate and MS_TO_MOVE
 };
 
 #endif //ISO_ENGINE_PLAYERSTATE_H

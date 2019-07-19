@@ -1,4 +1,6 @@
 #include "Player.h"
+SDL_Rect Player::rect_ = SDL_Rect();
+PlayerState *Player::state_ = &PlayerState::Still;
 
 bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
     // TODO check for out-of-bounds grid position
@@ -6,7 +8,7 @@ bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
     x_ = start[0];
     y_ = start[1];
 
-    width_ = height_ = static_cast<int>(std::min(TILE_WIDTH_HALF, TILE_HEIGHT_HALF) * PLAYER_TILE_RATIO) * 2;
+    rect_.w = rect_.h = static_cast<int>(std::min(TILE_WIDTH_HALF, TILE_HEIGHT_HALF) * PLAYER_TILE_RATIO) * 2;
 
     std::string player_sprite = *(config.get_qualified_as<std::string>("player.sprite"));
     auto surface = IMG_Load(EngineUtils::getResourcePath(player_sprite).c_str());
@@ -25,38 +27,28 @@ bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
     return true;
 }
 
-// TODO change to processInput? call from Game::processInput?
-// TODO change state here
-void Player::processInput() {
+void Player::processInput(const SDL_Event &event) {
     // TODO check bounds
-    // TODO change to slower movement of sprite to new coordinates
-    SDL_Event event;
-    if (SDL_PollEvent(&event) != 0) {
-        // User requests quit
-        if (event.type == SDL_KEYDOWN) {
-
+    Player::state_ = &PlayerState::Moving;
             switch (event.key.keysym.sym) {
                 case SDLK_UP:
-                    y_ -= 1; break;
+                    dY_ = -1; break;
                 case SDLK_DOWN:
-                    y_ += 1; break;
+                    dY_ = 1; break;
                 case SDLK_LEFT:
-                    x_ -= 1; break;
+                    dX_ = -1; break;
                 case SDLK_RIGHT:
-                    x_ += 1; break;
+                    dX_ = 1; break;
                 default:
+                    Player::state_ = &PlayerState::Still;
                     break;  // TODO play sound for invalid command
             }
-        }
-        // TODO flush/ignore event if still moving?
-    }
 }
 
 void Player::render(const Renderer &renderer) const {
-    int screenX = static_cast<int>(getScreenX());
-    int screenY = static_cast<int>(getScreenY());
-    SDL_Rect rect = {screenX, screenY, width_, height_};
-    SDL_RenderCopy(&renderer.getRenderer(), playerTexture_.get(), nullptr, &rect);
+    rect_.x = static_cast<int>(getScreenX());
+    rect_.y = static_cast<int>(getScreenY());
+    SDL_RenderCopy(&renderer.getRenderer(), playerTexture_.get(), nullptr, &rect_);
 }
 
 double Player::getScreenX() const {
@@ -71,4 +63,8 @@ double Player::getScreenY() const {
     // Offsetting the y values by this amount helps keep player sprite at the 'top' of the grid tile it's on
     screenY -= static_cast<int>(TILE_HEIGHT_HALF * (2.5 + TILE_HEIGHT_WIDTH_RATIO));
     return screenY;
+}
+
+void Player::update() {
+    Player::state_->update(*this);
 }

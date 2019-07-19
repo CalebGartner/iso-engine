@@ -7,11 +7,14 @@
 #include "cpptoml.h"
 #include "Renderer.h"
 #include "EngineUtils.h"
+#include "Player.h"
 
 // TODO double buffer the map?
 extern int TILE_WIDTH_HALF;
 extern int TILE_HEIGHT_HALF;
 extern double TILE_HEIGHT_WIDTH_RATIO;
+extern Uint32 ISO_TILE_TOUCHED;
+
 
 class Level {
 public:
@@ -21,12 +24,15 @@ public:
 
     bool init(const Renderer &renderer, const cpptoml::table &config);
     void render(const Renderer &renderer) const;
+    void update();
+    void processInput(const SDL_Event &event);
     void renderTile(SDL_Texture *texture, int x, int y, SDL_Rect *clip = nullptr, double angle = 0.0, SDL_Point *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     // These offsets essentially become the new tile grid origin - defaults to [0,0]
     int xOffset_ = 0, yOffset_ = 0;
 
 private:
+    SDL_UserEvent event_;
     Uint32 levelID_;
     Uint32 scorePerTile_ = 30;
     Uint32 bonus_ = 1000;

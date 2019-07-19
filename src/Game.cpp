@@ -60,7 +60,7 @@ void Game::run() {
 
         loops = 0;
         while (lag >= Display::MS_PER_UPDATE && loops < MAX_FRAMESKIP) {  // fixed time-step
-            update();  // option - Only update once/<RR times a second, but render @ RR
+            update();  // Only update once/<RR times a second, but render @ RR
             lag -= Display::MS_PER_UPDATE;
             loops++;
         }
@@ -71,10 +71,8 @@ void Game::run() {
 }
 
 void Game::update() {
-    // TODO Deal w/event queue modified by proccessInput() and update/check buffers/spatial mapping(s)
-    // level_->update();
-    // TODO update viewArea/camera after player updates by checking x,y values before/after?
-    player_->processInput();
+    level_->update();
+    player_->update();
 }
 
 void Game::processInput() {
@@ -82,6 +80,10 @@ void Game::processInput() {
         // User requests quit
         if (event_.type == SDL_QUIT) {
             running_ = false;
+        } else if (event_.type == SDL_KEYDOWN) {
+            player_->processInput(event_);
+        } else if (event_.type == ISO_TILE_TOUCHED) {
+            level_->processInput(event_);
         }
     }
 }
@@ -96,7 +98,6 @@ void Game::render() const {
     SDL_SetRenderDrawColor(&renderer_.getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(&renderer_.getRenderer());
 
-    // TODO render level background/player/other stuff
     renderer_.show();  // remove?
     level_->render(renderer_);
     player_->render(renderer_);

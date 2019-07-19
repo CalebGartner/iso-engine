@@ -10,7 +10,7 @@ windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
 
 [player]
     sprite='player|star_09.png'  # Folder for player sprites
-    start=[ 1,1 ]  # grid starting position
+    start=[ 1,1 ]  # grid starting position - does not take 'origin' into account
 
 
 [tiles]
