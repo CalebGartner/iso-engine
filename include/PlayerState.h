@@ -4,6 +4,7 @@
 class Player;
 class MovingState;
 class StillState;
+class DeadState;
 
 #include "Display.h"
 
@@ -13,6 +14,7 @@ public:
     // These can be static since there's only one player
     static MovingState Moving;
     static StillState Still;
+    static DeadState Dead;
 
     virtual ~PlayerState() = default;
     virtual void update(Player &player) = 0;
@@ -23,12 +25,17 @@ public:
     void update(Player &player) override;
 };
 
+class DeadState: public PlayerState {
+public:
+    void update(Player &player) override;
+};
+
 class MovingState: public PlayerState {
 public:
     void update(Player &player) override;
 private:
     // how long the player's movement from tile to tile takes
-    inline static int MS_TO_MOVE = 400;
+    inline static int MS_TO_MOVE = 500;
     inline static int timesMoved_ = 0;
     // number of frames it takes to complete the movement based on the display refresh rate and MS_TO_MOVE
     inline static int numFrames_ = 0;

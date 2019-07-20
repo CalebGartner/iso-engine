@@ -22,13 +22,16 @@ public:
 
     inline double getScreenX() const;
     inline double getScreenY() const;
+    void returnToStart();
 
     static SDL_Rect rect_;  // screen position
     static PlayerState *state_;  // TODO state push-down automata
     double x_, y_;  // grid position
     int dX_, dY_;
+    int lives_ = 4;  // TODO add to config
 private:
     // TODO add continuous player animation
+    int startX_, startY_;
     std::vector<std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> playerTextures_;
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> playerTexture_{nullptr, SDL_DestroyTexture};
 };

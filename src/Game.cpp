@@ -98,7 +98,7 @@ void Game::render() const {
     SDL_SetRenderDrawColor(&renderer_.getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(&renderer_.getRenderer());
 
-    renderer_.show();  // remove?
+    renderer_.show();
     level_->render(renderer_);
     player_->render(renderer_);
 

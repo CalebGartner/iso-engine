@@ -140,15 +140,22 @@ void Level::render(const Renderer &renderer) const {
 
 void Level::update() {
     if (event_.code == 1) {
-        double x = *(double*)(event_.data1);
-        double y = *(double*)(event_.data2);
-        map_[static_cast<int>(x)][static_cast<int>(y)] = tileTouched_.get();
+        auto *player = (Player*)(event_.data1);
+        int x = static_cast<int>(player->x_);
+        int y = static_cast<int>(player->y_);
+        if (map_[x][y] == nullptr) {
+            // Player has fallen off the map - change their state
+            Player::state_ = &PlayerState::Dead;
+        } else {
+            map_[x][y] = tileTouched_.get();
+        }
     }
     SDL_zero(event_);  // reset
     event_.code = 0;
 }
 
 void Level::processInput(const SDL_Event &event) {
+    // Player movement has been triggered, copy over the event data to handle on the next call to update()
     event_.type = event.user.type;
     event_.data1 = event.user.data1;
     event_.data2 = event.user.data2;

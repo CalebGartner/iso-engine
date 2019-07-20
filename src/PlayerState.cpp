@@ -3,6 +3,7 @@
 
 StillState PlayerState::Still = StillState();
 MovingState PlayerState::Moving = MovingState();
+DeadState PlayerState::Dead = DeadState();
 
 void StillState::update(Player &player) {
     // do nothing - or switch animation sprite
@@ -33,23 +34,23 @@ void MovingState::update(Player &player) {
     if (timesMoved_ <= numFrames_) {
         ++timesMoved_;
     } else {  // reset
-        timesMoved_ = 0;
         player.x_ = std::round(player.x_);
         player.y_ = std::round(player.y_);
-        if (std::abs(player.x_) < 0.5) {
-            player.x_ = 0;
-        }
-        if (std::abs(player.y_) < 0.5) {
-            player.y_ = 0;
-        }
         player.dX_ = 0;
         player.dY_ = 0;
+        timesMoved_ = 0;
         Player::state_ = &PlayerState::Still;
         // Push onto queue
         SDL_zero(tileEvent_);
         tileEvent_.type = ISO_TILE_TOUCHED;
-        tileEvent_.user.data1 = &player.x_;
-        tileEvent_.user.data2 = &player.y_;
+        tileEvent_.user.data1 = &player;
         SDL_PushEvent(&tileEvent_);
     }
+}
+
+void DeadState::update(Player &player) {
+    // TODO play sound - fade in/out
+    player.returnToStart();
+    player.lives_ -= 1;  // TODO trigger event if it;s 0?
+    Player::state_ = &PlayerState::Still;
 }

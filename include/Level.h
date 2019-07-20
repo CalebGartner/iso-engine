@@ -41,7 +41,7 @@ private:
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileTouched_{nullptr, SDL_DestroyTexture};
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileUntouched_{nullptr, SDL_DestroyTexture};
 
-    // TODO make each node a linked-list of Tiles instead . . .
+    // TODO make each node a linked-list of Tiles instead . . . make the player a subclass of Tile . . give each an update method
     std::vector<std::vector<SDL_Texture*>> map_;  // TODO make public?
 
     SDL_Texture *loadTexture(const Renderer &renderer, const std::string &resource);

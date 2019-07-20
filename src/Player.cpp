@@ -5,8 +5,8 @@ PlayerState *Player::state_ = &PlayerState::Still;
 bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
     // TODO check for out-of-bounds grid position
     auto start = *(config.get_qualified_array_of<int64_t>("player.start"));
-    x_ = start[0];
-    y_ = start[1];
+    x_ = startX_ = start[0];
+    y_ =  startY_ = start[1];
 
     rect_.w = rect_.h = static_cast<int>(std::min(TILE_WIDTH_HALF, TILE_HEIGHT_HALF) * PLAYER_TILE_RATIO) * 2;
 
@@ -28,7 +28,6 @@ bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
 }
 
 void Player::processInput(const SDL_Event &event) {
-    // TODO check bounds
     Player::state_ = &PlayerState::Moving;
             switch (event.key.keysym.sym) {
                 case SDLK_UP:
@@ -67,4 +66,9 @@ double Player::getScreenY() const {
 
 void Player::update() {
     Player::state_->update(*this);
+}
+
+void Player::returnToStart() {
+    x_ = startX_;
+    y_ = startY_;
 }
