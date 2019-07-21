@@ -23,12 +23,16 @@ bool Renderer::init(const std::string &name, Uint32 windowWidth, Uint32 windowHe
     if (!internalRenderer_)
         return false;
 
-    SDL_Rect camera;  // Make into private variable? create separate class?
-    SDL_RenderGetViewport(internalRenderer_.get(), &camera);  // implement later . . .
     // TODO create overlay viewports that remain static regardless of screen content - e.g., UI overlay
 
     // Get window surface - temporary
     screenSurface_.reset(SDL_GetWindowSurface(window_.get()));
+
+    int imgFlags = IMG_INIT_PNG;
+    if(!(IMG_Init(imgFlags) & imgFlags)) {
+        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+        return false;
+    }
 
     return true;
 }

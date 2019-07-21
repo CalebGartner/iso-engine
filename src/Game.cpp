@@ -21,7 +21,8 @@ bool Game::init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
 
     if (!Display::init()) return false;
-    // TODO AUDIO - fire event - begin background music
+
+    if (!Audio::init()) return false;
 
     if (!renderer_.init()) return false;  // Renderer uses Display, init() after
 
@@ -44,6 +45,7 @@ bool Game::init() {
 void Game::run() {
     running_ = true;
 
+    SDL_Thread *audioThread_ = SDL_CreateThread(Audio::start, "AudioThread", nullptr);
     // TODO put all the below into a struct? TickTimer? LoopTiming?
     Uint32 previous = SDL_GetTicks();  // milliseconds since SDL initialization
     Uint32 current = 0;
@@ -68,6 +70,7 @@ void Game::run() {
         render();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
 
+    SDL_WaitThread(audioThread_, nullptr);  // TODO detach instead?
     shutdown();
 }
 

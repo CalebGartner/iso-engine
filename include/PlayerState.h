@@ -35,7 +35,7 @@ public:
     void update(Player &player) override;
 private:
     // how long the player's movement from tile to tile takes
-    inline static int MS_TO_MOVE = 500;
+    inline static int MS_TO_MOVE = 400;
     inline static int timesMoved_ = 0;
     // number of frames it takes to complete the movement based on the display refresh rate and MS_TO_MOVE
     inline static int numFrames_ = 0;

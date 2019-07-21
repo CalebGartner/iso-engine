@@ -15,7 +15,7 @@ void MovingState::update(Player &player) {
     }
 
     // TODO multiply by numFrames somehow?
-    double lag_factor = 0.5;
+    double lag_factor = 0.3;
     int dX = (player.dX_ != 0) ? player.dX_ : (1 * player.dY_);
     int dY = (player.dY_ != 0) ? player.dY_ : (1 * player.dX_);
     if (player.dX_ == -1 || player.dY_ == -1) {

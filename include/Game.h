@@ -3,6 +3,8 @@
 
 
 #include "SDL.h"
+#include "SDL_thread.h"
+#include "Audio.h"
 #include "Player.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts

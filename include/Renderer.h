@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "SDL_render.h"
+#include "SDL_image.h"
 #include "Display.h"
 
 

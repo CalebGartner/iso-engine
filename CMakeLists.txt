@@ -24,9 +24,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE include cpptoml/include)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<C_COMPILER_ID:MSVC>:/W4 /WX>)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<NOT:$<C_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -g>)  # -Werror
 
-#add_library(libtoml SHARED GLOBAL IMPORTED)  # TODO add as git submodule?
-#target_link_libraries(${PROJECT_NAME} libtoml)
-
 # Add SDL2 library
 find_package(SDL2 REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
@@ -36,16 +33,16 @@ find_package(SDL2_image REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
 
 # Add SDL2_ttf library
-#find_package(SDL2_ttf REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+find_package(SDL2_ttf REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL2::TTF)
 
 # Add SDL2_net library
 #find_package(SDL2_net REQUIRED)
 #target_link_libraries(${PROJECT_NAME} SDL2::Net)
 
 # Add SDL2_mixer library
-#find_package(SDL2_mixer REQUIRED)
-#target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
+find_package(SDL2_mixer REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
 
 # Add SDL2_gfx library
 find_package(SDL2_gfx REQUIRED)
