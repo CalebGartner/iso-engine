@@ -14,6 +14,7 @@ void MovingState::update(Player &player) {
         numFrames_ = static_cast<int>((static_cast<double>(MovingState::MS_TO_MOVE) / 1000.0) * static_cast<double>(Display::REFRESH_RATE));
     }
 
+    // TODO multiply by numFrames somehow?
     double lag_factor = 0.5;
     int dX = (player.dX_ != 0) ? player.dX_ : (1 * player.dY_);
     int dY = (player.dY_ != 0) ? player.dY_ : (1 * player.dX_);
@@ -49,7 +50,7 @@ void MovingState::update(Player &player) {
 }
 
 void DeadState::update(Player &player) {
-    // TODO play sound - fade in/out
+    // TODO AUDIO - fire event
     player.returnToStart();
     player.lives_ -= 1;  // TODO trigger event if it;s 0?
     Player::state_ = &PlayerState::Still;

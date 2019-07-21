@@ -21,6 +21,7 @@ bool Game::init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
 
     if (!Display::init()) return false;
+    // TODO AUDIO - fire event - begin background music
 
     if (!renderer_.init()) return false;  // Renderer uses Display, init() after
 

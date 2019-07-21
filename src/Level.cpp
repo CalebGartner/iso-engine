@@ -148,6 +148,7 @@ void Level::update() {
             Player::state_ = &PlayerState::Dead;
         } else {
             map_[x][y] = tileTouched_.get();
+            // TODO AUDIO - fire event
         }
     }
     SDL_zero(event_);  // reset
