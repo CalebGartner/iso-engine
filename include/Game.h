@@ -35,6 +35,8 @@ private:
     std::unique_ptr<Player> player_;
 
     void processInput();
+
+    std::unique_ptr<Mix_Music, decltype(&Mix_FreeMusic)> musicLoop_{nullptr, Mix_FreeMusic};
 };
 
 inline const Renderer &Game::getRenderer() { return renderer_; }

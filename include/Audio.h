@@ -1,17 +1,15 @@
 #ifndef ISO_ENGINE_AUDIO_H
 #define ISO_ENGINE_AUDIO_H
 
-#include "SDL_audio.h"
 #include "SDL_mixer.h"
+#include "EngineUtils.h"
 
 namespace Audio {
-
+//    extern Uint32 ISO_AUDIO_EVENT;
     extern bool init();
-
-    // TODO AUDIO - begin background music - use SDL_PeepEvents() to check for audio events - it's thread safe
-    // TODO rename to run() ?
-    extern int start(void* data);  // thread function . . .
-
+    extern void shutdown();
+    extern Mix_Chunk *loadMixChunk(std::string audioFile);
+    extern Mix_Music *loadMixMusic(std::string audioFile);
 }
 
 

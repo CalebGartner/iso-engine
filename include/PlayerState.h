@@ -28,6 +28,7 @@ public:
 class DeadState: public PlayerState {
 public:
     void update(Player &player) override;
+    SDL_Event deathEvent_;
 };
 
 class MovingState: public PlayerState {

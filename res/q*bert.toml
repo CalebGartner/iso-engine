@@ -7,18 +7,22 @@ origin=[ 0, 0 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
 windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
+music='audio|music|Hypnotic-Puzzle.mp3'
 
 [player]
     sprite='player|star_09.png'  # Folder for player sprites
     start=[ 1,1 ]  # grid starting position - does not take 'origin' into account
 
-
 [tiles]
     # Using pipe character '|' as platform agnostic path separator - this assumes the tiles are under res/
     untouched='blocks|PNG|abstract-tiles|abstractTile_12.png'
     touched='blocks|PNG|abstract-tiles|abstractTile_32.png'
+    [tiles.audio]
+        untouched='audio|effects|PowerUp8.mp3'
+        touched='audio|effects|PowerUp8.mp3'
+        offmap='audio|effects|PowerUp8.mp3'
 
-[[level]]  # TODO add rounds?
+[[level]]  # Add rounds?
     id=1
     # For this level, regardless of aspect ratio, the screen should fit at least 6 tiles high so that the pyramid is completely shown
     minscreentileheight=6  # diagonal/vertical height of pyramid map in tiles
@@ -42,6 +46,7 @@ windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
     [level.tiles]
         untouched='res/blocks/PNG/abstract-tiles/abstractTile_12.png'
         touched='res/blocks/PNG/abstract-tiles/abstractTile_32.png'
+
 [[level]]
     id=2
     # etc . . .

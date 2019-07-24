@@ -1,4 +1,5 @@
 #include <Player.h>
+#include <Audio.h>
 #include "PlayerState.h"
 
 StillState PlayerState::Still = StillState();
@@ -14,7 +15,6 @@ void MovingState::update(Player &player) {
         numFrames_ = static_cast<int>((static_cast<double>(MovingState::MS_TO_MOVE) / 1000.0) * static_cast<double>(Display::REFRESH_RATE));
     }
 
-    // TODO multiply by numFrames somehow?
     double lag_factor = 0.3;
     int dX = (player.dX_ != 0) ? player.dX_ : (1 * player.dY_);
     int dY = (player.dY_ != 0) ? player.dY_ : (1 * player.dX_);
@@ -50,8 +50,13 @@ void MovingState::update(Player &player) {
 }
 
 void DeadState::update(Player &player) {
-    // TODO AUDIO - fire event
+    // AUDIO - fire event
+//    deathEvent_.type = Audio::ISO_AUDIO_EVENT;
+//    deathEvent_.user.code = 0;
+//    deathEvent_.user.data1 = &audioFile_;
+//    SDL_PushEvent(&deathEvent_);
+
     player.returnToStart();
-    player.lives_ -= 1;  // TODO trigger event if it;s 0?
+    player.lives_ -= 1;  // TODO trigger event if it's 0?
     Player::state_ = &PlayerState::Still;
 }

@@ -4,7 +4,9 @@
 #include <string>
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_mixer.h"
 #include "cpptoml.h"
+#include "Audio.h"
 #include "Renderer.h"
 #include "EngineUtils.h"
 #include "Player.h"
@@ -25,7 +27,7 @@ public:
     void render(const Renderer &renderer) const;
     void update();
     void processInput(const SDL_Event &event);
-    void renderTile(SDL_Texture *texture, int x, int y, SDL_Rect *clip = nullptr, double angle = 0.0, SDL_Point *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void shutdown();
 
     // These offsets essentially become the new tile grid origin - defaults to [0,0]
     int xOffset_ = 0, yOffset_ = 0;
@@ -40,9 +42,12 @@ private:
     // TODO typedef any of the below??
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileTouched_{nullptr, SDL_DestroyTexture};
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileUntouched_{nullptr, SDL_DestroyTexture};
-
     // TODO make each node a linked-list of Tiles instead . . . make the player a subclass of Tile . . give each an update method
     std::vector<std::vector<SDL_Texture*>> map_;  // TODO make public?
+
+    std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> tileTouchedSound_{nullptr, Mix_FreeChunk};
+    std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> tileUntouchedSound_{nullptr, Mix_FreeChunk};
+    std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> offMapSound_{nullptr, Mix_FreeChunk};
 
     SDL_Texture *loadTexture(const Renderer &renderer, const std::string &resource);
 };

@@ -82,6 +82,15 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
         map_[i].shrink_to_fit();  // Currently the map doesn't change size during runtime . . .
         ++i;
     }
+
+    // TODO create vector of string/Mix_Chunk* pairs in the Audio namespace, free on shutdown(), pass config to Audio::init()
+    std::string untouchedAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.untouched"));
+    std::string touchedAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.touched"));
+    std::string offMapAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.offmap"));
+    tileTouchedSound_.reset(Audio::loadMixChunk(touchedAudioFile));
+    tileUntouchedSound_.reset(Audio::loadMixChunk(untouchedAudioFile));
+    offMapSound_.reset(Audio::loadMixChunk(offMapAudioFile));
+
     return true;
 }
 
@@ -97,27 +106,6 @@ SDL_Texture *Level::loadTexture(const Renderer &renderer, const std::string &res
     SDL_FreeSurface(surface);
     return texture;
 }
-
-
-void Level::renderTile(SDL_Texture *texture, int x, int y, SDL_Rect *clip, double angle, SDL_Point *center, SDL_RendererFlip flip) {
-    // TODO change to renderMap() instead? need camera/viewport dimensions?
-//    SDL_Rect renderQuad = {x, y, width, height};
-//
-//    //Set clip rendering dimensions if they exist
-//    if(clip != nullptr) {
-//        renderQuad.w = clip->w;
-//        renderQuad.h = clip->h;
-//    }
-//
-//    // Fortunately, the images used are already rotated/projected isometrically, so there's no need to rotate here
-//    SDL_RenderCopyEx(renderer_, &texture, clip, &renderQuad, angle, center, flip);
-}
-
-// Sometimes though you have to convert screen pixels back to map coordinates. Example: the player clicks on a pixel;
-// how do we reverse the formula and find the tile?
-// So final actual commands are:
-//map.x = (screen.x / TILE_WIDTH_HALF + screen.y / TILE_HEIGHT_HALF) /2;
-//map.y = (screen.y / TILE_HEIGHT_HALF -(screen.x / TILE_WIDTH_HALF)) /2;
 
 void Level::render(const Renderer &renderer) const {
     for(std::vector<std::vector<SDL_Texture*>>::size_type i = 0; i != map_.size(); i++) {
@@ -146,9 +134,14 @@ void Level::update() {
         if (map_[x][y] == nullptr) {
             // Player has fallen off the map - change their state
             Player::state_ = &PlayerState::Dead;
+            Mix_PlayChannel(-1, offMapSound_.get(), 0);
         } else {
-            map_[x][y] = tileTouched_.get();
-            // TODO AUDIO - fire event
+            if (map_[x][y]  == tileUntouched_.get()) {
+                Mix_PlayChannel(-1, tileUntouchedSound_.get(), 0);
+                map_[x][y] = tileTouched_.get();
+            } else {
+                Mix_PlayChannel(-1, tileTouchedSound_.get(), 0);
+            }
         }
     }
     SDL_zero(event_);  // reset
@@ -161,4 +154,11 @@ void Level::processInput(const SDL_Event &event) {
     event_.data1 = event.user.data1;
     event_.data2 = event.user.data2;
     event_.code = 1;
+}
+
+void Level::shutdown() {
+    // This shouldn't be necessary, but what the heck
+    tileTouchedSound_.reset();
+    tileUntouchedSound_.reset();
+    offMapSound_.reset();
 }

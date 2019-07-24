@@ -9,9 +9,7 @@
 
 
 Game::Game(){
-//    renderer_ = Renderer();
     running_ = false;
-//    event_ = SDL_Event();
     level_ = std::make_unique<Level>(1);
     player_ = std::make_unique<Player>();
 }
@@ -35,6 +33,9 @@ bool Game::init() {
         return false;
     }
 
+    std::string musicFile = *(config->get_as<std::string>("music"));
+    musicLoop_.reset(Audio::loadMixMusic(musicFile));
+
     if (!level_->init(renderer_, *config)) return false;
 
     if (!player_->init(renderer_, *config)) return false;
@@ -45,13 +46,13 @@ bool Game::init() {
 void Game::run() {
     running_ = true;
 
-    SDL_Thread *audioThread_ = SDL_CreateThread(Audio::start, "AudioThread", nullptr);
     // TODO put all the below into a struct? TickTimer? LoopTiming?
     Uint32 previous = SDL_GetTicks();  // milliseconds since SDL initialization
     Uint32 current = 0;
     Uint32 elapsed = 0;
     Uint32 lag = 0;
     Uint8 loops = 0;
+    Mix_PlayMusic(musicLoop_.get(), -1);
 
     while (running_) {
         current = SDL_GetTicks();
@@ -69,9 +70,6 @@ void Game::run() {
         }
         render();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
-
-    SDL_WaitThread(audioThread_, nullptr);  // TODO detach instead?
-    shutdown();
 }
 
 void Game::update() {
@@ -94,7 +92,10 @@ void Game::processInput() {
 
 void Game::shutdown() {
     running_ = false;  // This is blocking . . . call from another thread? Is it caught from user input instead?
+    musicLoop_.reset();
     renderer_.shutdown();
+    level_->shutdown();
+    Audio::shutdown();
     SDL_Quit();
 }
 

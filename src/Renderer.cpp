@@ -41,6 +41,7 @@ void Renderer::shutdown() {
     screenSurface_.reset();
     internalRenderer_.reset();
     window_.reset();
+    IMG_Quit();
 }
 
 void Renderer::show() const {
