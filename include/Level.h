@@ -39,12 +39,13 @@ private:
     Uint32 bonus_ = 1000;
     Uint32 minScreenTileHeight_ = 6;
 
-    // TODO typedef any of the below??
+    // Tiles/Textures
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileTouched_{nullptr, SDL_DestroyTexture};
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> tileUntouched_{nullptr, SDL_DestroyTexture};
     // TODO make each node a linked-list of Tiles instead . . . make the player a subclass of Tile . . give each an update method
-    std::vector<std::vector<SDL_Texture*>> map_;  // TODO make public?
+    std::vector<std::vector<SDL_Texture*>> map_;
 
+    // Audio
     std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> tileTouchedSound_{nullptr, Mix_FreeChunk};
     std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> tileUntouchedSound_{nullptr, Mix_FreeChunk};
     std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> offMapSound_{nullptr, Mix_FreeChunk};

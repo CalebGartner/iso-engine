@@ -22,8 +22,6 @@ bool Game::init() {
 
     if (!Audio::init()) return false;
 
-    if (!renderer_.init()) return false;  // Renderer uses Display, init() after
-
     // Open TOML file for parsing
     std::shared_ptr<cpptoml::table> config;
     try {
@@ -35,6 +33,8 @@ bool Game::init() {
 
     std::string musicFile = *(config->get_as<std::string>("music"));
     musicLoop_.reset(Audio::loadMixMusic(musicFile));
+
+    if (!renderer_.init(*config)) return false;  // Renderer uses Display, init() after
 
     if (!level_->init(renderer_, *config)) return false;
 
@@ -68,6 +68,7 @@ void Game::run() {
             lag -= Display::MS_PER_UPDATE;
             loops++;
         }
+        SDL_Delay(Display::MS_PER_UPDATE - lag);
         render();  // TODO pass lag to render - (lag / MSPerUpdate) - normalize the value between 0 and 1
     }
 }

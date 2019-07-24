@@ -28,7 +28,7 @@ public:
     static PlayerState *state_;  // TODO state push-down automata
     double x_, y_;  // grid position
     int dX_, dY_;
-    int lives_ = 4;  // TODO add to config
+    int lives_ = 4;
 private:
     // TODO add continuous player animation
     int startX_, startY_;

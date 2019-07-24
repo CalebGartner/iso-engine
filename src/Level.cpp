@@ -12,7 +12,7 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     scorePerTile_ = *(config.get_as<Uint32>("scorepertile"));
     bonus_ = *(config.get_as<Uint32>("bonus"));
 
-    // Get the corresponding level table from the TOML file
+    // Get the corresponding level table from the TOML file+
     auto tarr = config.get_table_array("level");
     std::shared_ptr<cpptoml::table> level;
     for (const auto &table : *tarr) {
@@ -83,7 +83,6 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
         ++i;
     }
 
-    // TODO create vector of string/Mix_Chunk* pairs in the Audio namespace, free on shutdown(), pass config to Audio::init()
     std::string untouchedAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.untouched"));
     std::string touchedAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.touched"));
     std::string offMapAudioFile = *(config.get_qualified_as<std::string>("tiles.audio.offmap"));
@@ -96,7 +95,7 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
 
 // TODO add to ISOUtils namespace?
 SDL_Texture *Level::loadTexture(const Renderer &renderer, const std::string &resource) {
-    // TODO load from vector .svg sprite sheet instead and optimize the texture/image via SDL_Optimize~~~?
+    // TODO load from vector .svg sprite sheet instead?
     auto surface = IMG_Load(EngineUtils::getResourcePath(resource).c_str());
     if (surface == nullptr) {
         printf("Unable to load image %s! SDL_image Error: %s\n", resource.c_str(), IMG_GetError());
@@ -137,9 +136,11 @@ void Level::update() {
             Mix_PlayChannel(-1, offMapSound_.get(), 0);
         } else {
             if (map_[x][y]  == tileUntouched_.get()) {
+                // Tile has not been touched
                 Mix_PlayChannel(-1, tileUntouchedSound_.get(), 0);
                 map_[x][y] = tileTouched_.get();
             } else {
+                // Tile has already been touched
                 Mix_PlayChannel(-1, tileTouchedSound_.get(), 0);
             }
         }

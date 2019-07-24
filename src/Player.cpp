@@ -9,6 +9,7 @@ bool Player::init(const Renderer &renderer, const cpptoml::table &config) {
     y_ =  startY_ = start[1];
 
     rect_.w = rect_.h = static_cast<int>(std::min(TILE_WIDTH_HALF, TILE_HEIGHT_HALF) * PLAYER_TILE_RATIO) * 2;
+    lives_ = *(config.get_qualified_as<int>("player.lives"));
 
     std::string player_sprite = *(config.get_qualified_as<std::string>("player.sprite"));
     auto surface = IMG_Load(EngineUtils::getResourcePath(player_sprite).c_str());

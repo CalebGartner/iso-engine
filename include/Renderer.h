@@ -2,10 +2,11 @@
 #define ISO_ENGINE_RENDERER_H
 
 #include <memory>
+#include "cpptoml.h"
 #include "SDL_render.h"
 #include "SDL_image.h"
+#include "EngineUtils.h"
 #include "Display.h"
-
 
 
 class Renderer {
@@ -14,7 +15,8 @@ public:
     inline static int WindowHeight = 960;
     inline static std::string WindowName = "ISO-Engine";
 
-    bool init(const std::string &name = WindowName,
+    bool init(const cpptoml::table &config,
+              const std::string &name = WindowName,
               Uint32 windowWidth = WindowWidth,
               Uint32 windowHeight = WindowHeight);
     void shutdown();
@@ -28,7 +30,8 @@ private:
     // Default initialize w/nullptr since SDL needs to initialize first
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window_{nullptr, SDL_DestroyWindow};
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> internalRenderer_{nullptr, SDL_DestroyRenderer};
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> screenSurface_{nullptr, SDL_FreeSurface};  // temporary
+    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> screenSurface_{nullptr, SDL_FreeSurface};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> background_{nullptr, SDL_DestroyTexture};
 };
 
 #endif //ISO_ENGINE_RENDERER_H

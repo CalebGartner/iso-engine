@@ -3,15 +3,15 @@
 #include "Audio.h"
 
 namespace Audio {
-//    Uint32 ISO_AUDIO_EVENT = 0;
+    static int CHANNELS = 2;
+    static int FREQUENCY = 22050;
+    static int CHUNK_SIZE = 2048;
 
     bool init() {
-        // TODO fix magic numbers
-        if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        if (Mix_OpenAudio(FREQUENCY, MIX_DEFAULT_FORMAT, CHANNELS, CHUNK_SIZE) < 0) {
             printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
             return false;
         }
-//        ISO_AUDIO_EVENT = SDL_RegisterEvents(1);
         Mix_Init(MIX_INIT_MP3);
 
         return true;

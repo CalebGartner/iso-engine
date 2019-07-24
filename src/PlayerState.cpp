@@ -11,6 +11,7 @@ void StillState::update(Player &player) {
 }
 
 void MovingState::update(Player &player) {
+    // TODO use SDL_RenderCopyEx instead
     if (timesMoved_ == 0) {
         numFrames_ = static_cast<int>((static_cast<double>(MovingState::MS_TO_MOVE) / 1000.0) * static_cast<double>(Display::REFRESH_RATE));
     }
@@ -50,13 +51,7 @@ void MovingState::update(Player &player) {
 }
 
 void DeadState::update(Player &player) {
-    // AUDIO - fire event
-//    deathEvent_.type = Audio::ISO_AUDIO_EVENT;
-//    deathEvent_.user.code = 0;
-//    deathEvent_.user.data1 = &audioFile_;
-//    SDL_PushEvent(&deathEvent_);
-
     player.returnToStart();
-    player.lives_ -= 1;  // TODO trigger event if it's 0?
+    player.lives_ -= 1;  // TODO trigger event if it's 0 . . .
     Player::state_ = &PlayerState::Still;
 }

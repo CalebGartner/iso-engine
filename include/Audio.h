@@ -5,7 +5,6 @@
 #include "EngineUtils.h"
 
 namespace Audio {
-//    extern Uint32 ISO_AUDIO_EVENT;
     extern bool init();
     extern void shutdown();
     extern Mix_Chunk *loadMixChunk(std::string audioFile);

@@ -2,11 +2,11 @@
 
 #define WINDOW_FLAGS (SDL_WINDOW_SHOWN)
 // | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_FULLSCREEN_DESKTOP)
-
 #define RENDERER_FLAGS (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC)
+#define IMG_FLAGS (IMG_INIT_PNG | IMG_INIT_JPG)
 
 
-bool Renderer::init(const std::string &name, Uint32 windowWidth, Uint32 windowHeight) {
+bool Renderer::init(const cpptoml::table &config, const std::string &name, Uint32 windowWidth, Uint32 windowHeight) {
     window_.reset(SDL_CreateWindow(name.c_str(),
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
@@ -23,16 +23,22 @@ bool Renderer::init(const std::string &name, Uint32 windowWidth, Uint32 windowHe
     if (!internalRenderer_)
         return false;
 
-    // TODO create overlay viewports that remain static regardless of screen content - e.g., UI overlay
-
-    // Get window surface - temporary
     screenSurface_.reset(SDL_GetWindowSurface(window_.get()));
 
-    int imgFlags = IMG_INIT_PNG;
-    if(!(IMG_Init(imgFlags) & imgFlags)) {
+    if(!(IMG_Init(IMG_FLAGS))) {
         printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
         return false;
     }
+
+    std::string background_file = EngineUtils::getResourcePath("background.jpg");
+    SDL_Surface *temp = IMG_Load(background_file.c_str());
+    if (!temp) {
+        printf("Unable to load image %s! SDL_image Error: %s\n", background_file.c_str(), IMG_GetError());
+        return false;
+    }
+
+    background_.reset(SDL_CreateTextureFromSurface(internalRenderer_.get(), temp));
+    SDL_FreeSurface(temp);
 
     return true;
 }
@@ -45,11 +51,7 @@ void Renderer::shutdown() {
 }
 
 void Renderer::show() const {
-    // TODO replace w/background blit image
-    SDL_SetRenderDrawColor(internalRenderer_.get(), 0x00, 0x00, 0x00, 0x00);
-    auto v = viewArea();
-    SDL_RenderFillRect(internalRenderer_.get(), &v);
-    SDL_SetRenderDrawColor(internalRenderer_.get(), 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderCopy(internalRenderer_.get(), background_.get(), nullptr, nullptr);
 }
 
 SDL_Rect Renderer::viewArea() const {  // pass in Rect instead? Default arg?
