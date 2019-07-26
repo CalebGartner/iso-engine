@@ -3,7 +3,7 @@
 
 # The variables below are overridden by a level if they are specified in that level
 # The origin defines the map array coordinate to place at the top center position of the screen after loading the map
-origin=[ 0, 0 ]
+origin=[ 0, 3.5 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
 windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
@@ -13,7 +13,7 @@ uifont='visitor2.ttf'
 
 [player]
     sprite='player|star_09.png'  # Folder for player sprites
-    start=[ 1,1 ]  # grid starting position - does not take 'origin' into account
+    start=[ 1, 4 ]  # grid starting position - does not take 'origin' into account
     lives=4
 
 [tiles]
@@ -28,22 +28,25 @@ uifont='visitor2.ttf'
 [[level]]  # Add rounds?
     id=1
     # For this level, regardless of aspect ratio, the screen should fit at least 6 tiles high so that the pyramid is completely shown
-    minscreentileheight=6  # diagonal/vertical height of pyramid map in tiles
-    # 0 = no tile
+    minscreentileheight=9  # vertical height of pyramid map in tiles
+    # 0 = no tile (nullptr)
     # 1 = platform tile
     # 2 = disc
-    map=[    # 9x9 grid/2
-# top center of screen
-        [0,0,0,0,0,0,2,0,0], # rightmost on screen
-        [0,1,1,1,1,1,1,1,0],
-        [0,1,1,1,1,1,1,0],
-        [0,1,1,1,1,1,0],
-        [0,1,1,1,1,0],  # bottom of screen
-        [0,1,1,1,0],
-        [2,1,1,0],
-        [0,1,0],
-        [0,0]
-# leftmost on screen
+    # Staggered representation at the largest aspect ratio (4:3 || 16:12) - the map coordinates are 0-indexed
+    # TODO make window class w/AspectRatio static var, dimensions, etc - add to Renderer?
+    map=[
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 
     [level.tiles]
