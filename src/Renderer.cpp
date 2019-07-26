@@ -25,7 +25,7 @@ bool Renderer::init(const cpptoml::table &config, const std::string &name, Uint3
 
     screenSurface_.reset(SDL_GetWindowSurface(window_.get()));
 
-    if(!(IMG_Init(IMG_FLAGS))) {
+    if (!IMG_Init(IMG_FLAGS)) {
         printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
         return false;
     }

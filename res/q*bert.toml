@@ -9,6 +9,7 @@ bonus=1000  # bonus points for completing this level
 windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
 background='background.png'
 music='audio|music|Hypnotic-Puzzle.mp3'
+uifont='visitor2.ttf'
 
 [player]
     sprite='player|star_09.png'  # Folder for player sprites

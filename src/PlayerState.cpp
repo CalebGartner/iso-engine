@@ -52,6 +52,13 @@ void MovingState::update(Player &player) {
 
 void DeadState::update(Player &player) {
     player.returnToStart();
-    player.lives_ -= 1;  // TODO trigger event if it's 0 . . .
+    player.lives_ -= 1;
+
+    SDL_zero(event_);
+    event_.type = ISO_UI_EVENT;
+    event_.user.code = 2;
+    event_.user.data1 = &player.lives_;
+    SDL_PushEvent(&event_);
+
     Player::state_ = &PlayerState::Still;
 }

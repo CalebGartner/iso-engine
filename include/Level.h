@@ -7,6 +7,7 @@
 #include "SDL_mixer.h"
 #include "cpptoml.h"
 #include "Audio.h"
+#include "UILayer.h"
 #include "Renderer.h"
 #include "EngineUtils.h"
 #include "Player.h"
@@ -33,8 +34,8 @@ public:
     int xOffset_ = 0, yOffset_ = 0;
 
 private:
-    SDL_UserEvent event_;
-    Uint32 levelID_;
+    SDL_Event event_;
+    Uint32 levelID_ = 0;
     Uint32 scorePerTile_ = 30;
     Uint32 bonus_ = 1000;
     Uint32 minScreenTileHeight_ = 6;

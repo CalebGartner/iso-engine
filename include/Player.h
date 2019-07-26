@@ -27,7 +27,7 @@ public:
     static SDL_Rect rect_;  // screen position
     static PlayerState *state_;  // TODO state push-down automata
     double x_, y_;  // grid position
-    int dX_, dY_;
+    int dX_, dY_ = 0;
     int lives_ = 4;
 private:
     // TODO add continuous player animation
