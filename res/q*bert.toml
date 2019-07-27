@@ -2,22 +2,25 @@
 # TODO add TMX support? - http://doc.mapeditor.org/en/stable/reference/support-for-tmx-maps/#id1
 
 # The variables below are overridden by a level if they are specified in that level
-# The origin defines the map array coordinate to place at the top center position of the screen after loading the map
-origin=[ 0, 3.5 ]
+# The origin defines the map array coordinate to place at the top left position of the screen after loading the map
+origin=[ 0, 1 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
 windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
 background='background.png'
 music='audio|music|Hypnotic-Puzzle.mp3'
 uifont='visitor2.ttf'
+# For level 1, regardless of aspect ratio, the screen should fit at least 9 tiles high so that the pyramid is completely shown
+minscreentileheight=6  # vertical height of the level map in tiles (not staggered)
 
 [player]
     sprite='player|star_09.png'  # Folder for player sprites
-    start=[ 1, 4 ]  # grid starting position - does not take 'origin' into account
+    start=[ 2, 5 ]  # grid starting position - does not take 'origin' into account
     lives=4
 
 [tiles]
     # Using pipe character '|' as platform agnostic path separator - this assumes the tiles are under res/
+    # TODO load from vector .svg sprite sheet instead?
     untouched='blocks|PNG|abstract-tiles|abstractTile_12.png'
     touched='blocks|PNG|abstract-tiles|abstractTile_32.png'
     [tiles.audio]
@@ -25,16 +28,17 @@ uifont='visitor2.ttf'
         touched='audio|effects|PowerUp8.mp3'
         offmap='audio|effects|PowerUp8.mp3'
 
+# TODO make [level."1"] instead?
 [[level]]  # Add rounds?
     id=1
-    # For this level, regardless of aspect ratio, the screen should fit at least 6 tiles high so that the pyramid is completely shown
-    minscreentileheight=9  # vertical height of pyramid map in tiles
     # 0 = no tile (nullptr)
     # 1 = platform tile
     # 2 = disc
     # Staggered representation at the largest aspect ratio (4:3 || 16:12) - the map coordinates are 0-indexed
     # TODO make window class w/AspectRatio static var, dimensions, etc - add to Renderer?
-    map=[
+    # Origin is at the top left
+    map=[  # The top row will always start staggered
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

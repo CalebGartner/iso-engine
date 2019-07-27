@@ -37,6 +37,8 @@ bool Game::init() {
 
     if (!renderer_.init(*config)) return false;  // Renderer uses Display, init() after
 
+    if (!Tile::init(renderer_, *config)) return false;
+
     if (!level_->init(renderer_, *config)) return false;
 
     if (!player_->init(renderer_, *config)) return false;
@@ -101,6 +103,7 @@ void Game::processInput() {
 void Game::shutdown() {
     running_ = false;  // This is blocking . . . call from another thread? Is it caught from user input instead?
     musicLoop_.reset();
+    Tile::shutdown();
     uiLayer_->shutdown();
     level_->shutdown();
     renderer_.shutdown();

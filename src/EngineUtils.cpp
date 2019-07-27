@@ -44,4 +44,15 @@ namespace EngineUtils {
         // If we want a specific subdirectory path in the resource directory
         return subPath.empty() ? resPath : resPath + subPath;
     }
+
+    SDL_Texture *loadTexture(SDL_Renderer *renderer, const std::string &resource) {
+        auto surface = IMG_Load(EngineUtils::getResourcePath(resource).c_str());
+        if (surface == nullptr) {
+            printf("Unable to load image %s! SDL_image Error: %s\n", resource.c_str(), IMG_GetError());
+            return nullptr;
+        }
+        auto texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface);
+        return texture;
+    }
 }

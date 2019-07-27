@@ -1,9 +1,10 @@
 #include "UILayer.h"
 
-Uint32 ISO_UI_EVENT = SDL_RegisterEvents(1);
+Uint32 ISO_UI_EVENT = 0;
 int UILayer::FontSize = 78;
 
 bool UILayer::init(const cpptoml::table &config) {
+    ISO_UI_EVENT = SDL_RegisterEvents(1);
     if (ISO_UI_EVENT == ((Uint32) - 1)) return false;
 
     if (TTF_Init() == -1) {

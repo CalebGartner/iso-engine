@@ -11,35 +11,28 @@ void StillState::update(Player &player) {
 }
 
 void MovingState::update(Player &player) {
-    // TODO use SDL_RenderCopyEx instead
+    // TODO just update the angle here? - angle depends on key pressed
     if (timesMoved_ == 0) {
         numFrames_ = static_cast<int>((static_cast<double>(MovingState::MS_TO_MOVE) / 1000.0) * static_cast<double>(Display::REFRESH_RATE));
+        player.angleIncrement_ = (player.rotationAngles_.y - player.rotationAngles_.x) / numFrames_;
     }
 
-    double lag_factor = 0.3;
-    int dX = (player.dX_ != 0) ? player.dX_ : (1 * player.dY_);
-    int dY = (player.dY_ != 0) ? player.dY_ : (1 * player.dX_);
-    if (player.dX_ == -1 || player.dY_ == -1) {
-        dY *= -1;
-        dX *= -1;
-        lag_factor *= -1;
-    }
-    double t = 1.0 / numFrames_;
-    if (timesMoved_ < (numFrames_ / 2)) {
-        player.x_ += (t * (player.dX_ * (1.0 + lag_factor))) - (dX * t);
-        player.y_ += (t * (player.dY_ * (1.0 + lag_factor))) - (dY * t);
-    } else {
-        player.x_ += (t * (player.dX_ * (1.0 - lag_factor))) + (dX * t);
-        player.y_ += (t * (player.dY_ * (1.0 - lag_factor))) + (dY * t);
-    }
+    player.angle_ = player.rotationAngles_.x + (player.angleIncrement_ * timesMoved_);
+    // TODO fix player.rect_ somehow . . .
+    // + player.startX_ . . .
+    Player::rect_.x = ((TILE_HEIGHT/2) * std::cos(player.angle_)) + player.getScreenX(static_cast<double>(player.pivot_.x));
+    Player::rect_.y = ((TILE_HEIGHT/2) * std::sin(player.angle_)) + player.getScreenY(static_cast<double>(player.pivot_.y));
 
     if (timesMoved_ <= numFrames_) {
         ++timesMoved_;
     } else {  // reset
-        player.x_ = std::round(player.x_);
-        player.y_ = std::round(player.y_);
+        player.x_ = Player::rect_.x = std::round(player.x_);
+        player.y_ = Player::rect_.y = std::round(player.y_);
         player.dX_ = 0;
         player.dY_ = 0;
+        player.angle_ = 0;
+        player.angleIncrement_ = 0;
+        SDL_zero(player.pivot_);
         timesMoved_ = 0;
         Player::state_ = &PlayerState::Still;
         // Push onto queue

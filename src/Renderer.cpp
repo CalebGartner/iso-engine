@@ -30,6 +30,7 @@ bool Renderer::init(const cpptoml::table &config, const std::string &name, Uint3
         return false;
     }
 
+    // TODO add to Window class . . .
     std::string background_file = EngineUtils::getResourcePath("background.jpg");
     SDL_Surface *temp = IMG_Load(background_file.c_str());
     if (!temp) {

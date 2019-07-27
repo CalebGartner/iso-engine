@@ -20,15 +20,19 @@ public:
     void render(const Renderer &renderer) const;
     void update();
 
-    inline double getScreenX() const;
-    inline double getScreenY() const;
+    int getScreenX(double x) const;
+    int getScreenY(double y) const;
     void returnToStart();
 
     static SDL_Rect rect_;  // screen position
     static PlayerState *state_;  // TODO state push-down automata
-    double x_, y_;  // grid position
+    SDL_Point pivot_;
+    int x_, y_;  // grid position
     int dX_, dY_ = 0;
     int lives_ = 4;
+    double angle_;
+    double angleIncrement_;
+    SDL_Point rotationAngles_;
 private:
     // TODO add continuous player animation
     int startX_, startY_;
