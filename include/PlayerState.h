@@ -6,8 +6,6 @@ class MovingState;
 class StillState;
 class DeadState;
 
-#include "Display.h"
-
 
 class PlayerState {
 public:
@@ -15,6 +13,8 @@ public:
     static MovingState Moving;
     static StillState Still;
     static DeadState Dead;
+
+    friend class Player;
 
     virtual ~PlayerState() = default;
     virtual void update(Player &player) = 0;

@@ -22,6 +22,7 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
             break;
         }
     }
+    EngineUI::Level = levelID_;
 
     // Load the specified tile textures
     std::string touched = *(config.get_qualified_as<std::string>("tiles.touched"));
@@ -134,11 +135,13 @@ void Level::update() {
             // Player has fallen off the map - change their state
             Player::state_ = &PlayerState::Dead;
             Mix_PlayChannel(-1, offMapSound_.get(), 0);
+            EngineUI::Lives -= 1;
         } else {
             if (map_[x][y]  == tileUntouched_.get()) {
                 // Tile has not been touched
                 Mix_PlayChannel(-1, tileUntouchedSound_.get(), 0);
                 map_[x][y] = tileTouched_.get();
+                EngineUI::Score += scorePerTile_;
             } else {
                 // Tile has already been touched
                 Mix_PlayChannel(-1, tileTouchedSound_.get(), 0);

@@ -1,6 +1,4 @@
-#include <Player.h>
-#include <Audio.h>
-#include "PlayerState.h"
+#include "Player.h"
 
 StillState PlayerState::Still = StillState();
 MovingState PlayerState::Moving = MovingState();
@@ -11,7 +9,6 @@ void StillState::update(Player &player) {
 }
 
 void MovingState::update(Player &player) {
-    // TODO use SDL_RenderCopyEx instead
     if (timesMoved_ == 0) {
         numFrames_ = static_cast<int>((static_cast<double>(MovingState::MS_TO_MOVE) / 1000.0) * static_cast<double>(Display::REFRESH_RATE));
     }

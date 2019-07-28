@@ -10,6 +10,8 @@
 #include "Renderer.h"
 #include "EngineUtils.h"
 #include "Player.h"
+#include "UILayer.h"
+
 
 extern int TILE_WIDTH_HALF;
 extern int TILE_HEIGHT_HALF;

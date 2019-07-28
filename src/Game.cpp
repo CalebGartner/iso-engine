@@ -12,6 +12,7 @@ Game::Game(){
     running_ = false;
     level_ = std::make_unique<Level>(1);
     player_ = std::make_unique<Player>();
+    uiLayer_ = std::make_unique<UILayer>();
 }
 
 bool Game::init() {
@@ -39,6 +40,8 @@ bool Game::init() {
     if (!level_->init(renderer_, *config)) return false;
 
     if (!player_->init(renderer_, *config)) return false;
+
+    if (!uiLayer_->init(*config)) return false;
 
     return true;
 }
@@ -76,6 +79,7 @@ void Game::run() {
 void Game::update() {
     level_->update();
     player_->update();
+    uiLayer_->update(renderer_);
 }
 
 void Game::processInput() {
@@ -94,6 +98,7 @@ void Game::processInput() {
 void Game::shutdown() {
     running_ = false;  // This is blocking . . . call from another thread? Is it caught from user input instead?
     musicLoop_.reset();
+    uiLayer_->shutdown();
     renderer_.shutdown();
     level_->shutdown();
     Audio::shutdown();
@@ -107,6 +112,7 @@ void Game::render() const {
     renderer_.show();
     level_->render(renderer_);
     player_->render(renderer_);
+    uiLayer_->render(renderer_);
 
     SDL_RenderPresent(&renderer_.getRenderer());
 }

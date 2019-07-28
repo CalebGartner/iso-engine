@@ -6,6 +6,7 @@
 #include "SDL_thread.h"
 #include "Audio.h"
 #include "Player.h"
+#include "UILayer.h"
 
 // TODO logging (via SDL_Log?) and debug preprocessing/asserts
 
@@ -33,6 +34,7 @@ private:
     // TODO Load level by menu selection after that's implemented
     std::unique_ptr<Level> level_;
     std::unique_ptr<Player> player_;
+    std::unique_ptr<UILayer> uiLayer_;
 
     void processInput();
 
