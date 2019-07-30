@@ -91,6 +91,8 @@ void Game::processInput() {
             player_->processInput(event_);
         } else if (event_.type == ISO_TILE_TOUCHED) {
             level_->processInput(event_);
+        } else if (event_.type == ISO_LEVEL_COMPLETE) {
+            running_ = false;  // TODO add new UILayer-type class with level over/play again? text
         }
     }
 }

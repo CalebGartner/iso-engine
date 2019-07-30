@@ -6,9 +6,9 @@
 origin=[ 0, 0 ]
 scorepertile=30
 bonus=1000  # bonus points for completing this level
-windowicon='blocks|PNG|abstract-tiles|abstractTile_32.png'
+windowicon='tiles|abstract|abstractTile_32.png'
 background='background.png'
-music='audio|music|Hypnotic-Puzzle.mp3'
+music='audio|music|Puddle-Jumping.mp3'
 uifont='visitor2.ttf'
 
 [player]
@@ -18,12 +18,12 @@ uifont='visitor2.ttf'
 
 [tiles]
     # Using pipe character '|' as platform agnostic path separator - this assumes the tiles are under res/
-    untouched='blocks|PNG|abstract-tiles|abstractTile_12.png'
-    touched='blocks|PNG|abstract-tiles|abstractTile_32.png'
+    untouched='tiles|abstract|abstractTile_12.png'
+    touched='tiles|abstract|abstractTile_32.png'
     [tiles.audio]
-        untouched='audio|effects|PowerUp8.mp3'
-        touched='audio|effects|PowerUp8.mp3'
-        offmap='audio|effects|PowerUp8.mp3'
+        untouched='audio|effects|SynthChime1.mp3'
+        touched='audio|effects|SynthChime3.mp3'
+        offmap='audio|effects|Laser-Shot-1.mp3'
 
 [[level]]  # Add rounds?
     id=1

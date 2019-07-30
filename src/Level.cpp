@@ -4,6 +4,7 @@ int TILE_WIDTH_HALF = 0;
 int TILE_HEIGHT_HALF = 0;
 double TILE_HEIGHT_WIDTH_RATIO = 0;
 Uint32 ISO_TILE_TOUCHED = 0;
+Uint32 ISO_LEVEL_COMPLETE = 0;
 
 bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
     auto anchor = *(config.get_array_of<int64_t >("origin"));
@@ -35,6 +36,8 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
 
     ISO_TILE_TOUCHED = SDL_RegisterEvents(1);
     if (ISO_TILE_TOUCHED == ((Uint32) - 1)) return false;
+    ISO_LEVEL_COMPLETE = SDL_RegisterEvents(1);
+    if (ISO_LEVEL_COMPLETE == ((Uint32) - 1)) return false;
 
     // Set window icon
     std::string iconPath = *(config.get_as<std::string>("windowicon"));
@@ -68,6 +71,7 @@ bool Level::init(const Renderer &renderer, const cpptoml::table &config) {
             switch (tileType) {  // TODO change to hash map/pairs or something else
                 case 1:
                     map_[i].insert(it, tileUntouched_.get());
+                    tilesRemaining_++;
                     break;
                 case 2:
                     map_[i].insert(it, nullptr);
@@ -142,6 +146,12 @@ void Level::update() {
                 Mix_PlayChannel(-1, tileUntouchedSound_.get(), 0);
                 map_[x][y] = tileTouched_.get();
                 EngineUI::Score += scorePerTile_;
+                tilesRemaining_--;
+                if (tilesRemaining_ == 0) {
+                    SDL_Event e;
+                    e.type = ISO_LEVEL_COMPLETE;
+                    SDL_PushEvent(&e);
+                }
             } else {
                 // Tile has already been touched
                 Mix_PlayChannel(-1, tileTouchedSound_.get(), 0);
@@ -149,7 +159,6 @@ void Level::update() {
         }
     }
     SDL_zero(event_);  // reset
-    event_.code = 0;
 }
 
 void Level::processInput(const SDL_Event &event) {

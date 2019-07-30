@@ -17,6 +17,7 @@ extern int TILE_WIDTH_HALF;
 extern int TILE_HEIGHT_HALF;
 extern double TILE_HEIGHT_WIDTH_RATIO;
 extern Uint32 ISO_TILE_TOUCHED;
+extern Uint32 ISO_LEVEL_COMPLETE;
 
 
 class Level {
@@ -33,6 +34,7 @@ public:
 
     // These offsets essentially become the new tile grid origin - defaults to [0,0]
     int xOffset_ = 0, yOffset_ = 0;
+    int tilesRemaining_;
 
 private:
     SDL_UserEvent event_;
